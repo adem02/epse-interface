@@ -1,0 +1,58 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@theme {
+  /* Colors */
+  --color-background-deep: #0a0e14;
+  --color-background-surface: #0f141a;
+  --color-background-elevated: #151a21;
+  --color-background-hover: #20262f;
+
+  --color-primary: #00E5FF;
+  --color-primary-dark: #00B8CC;
+  --color-primary-light: #33EAFF;
+
+  --color-border-ghost: rgba(31, 41, 55, 0.15);
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+
+  /* Fonts */
+  --font-sans: 'Manrope', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Border radius */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+
+  /* Font sizes */
+  --text-ui-sm: 13px;
+}
+
+@layer base {
+  body {
+    @apply bg-background-deep text-text-primary font-sans antialiased;
+  }
+
+  code, pre {
+    @apply font-mono;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-background-deep px-4 py-2 rounded-sm font-semibold
+           hover:opacity-90 active:scale-95 transition-all duration-100;
+  }
+
+  .input-field {
+    @apply bg-background-elevated border border-border-ghost rounded-sm px-3 py-2
+           focus:outline-none focus:border-primary text-sm transition-colors;
+  }
+
+  .card {
+    @apply bg-background-surface border border-border-subtle rounded-sm p-4;
+  }
+}
