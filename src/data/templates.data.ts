@@ -3,7 +3,7 @@ import type { Blueprint } from "../types/templates.types";
 export const templatesBlueprints: Blueprint[] = [
   {
     id: "1",
-    pattern: "PATTERN 01",
+    name: "PATTERN 01",
     title: "REST API",
     description:
       "Minimal Express/TypeScript structure with routes, controllers and error handling. Ready for a straightforward REST API.",
@@ -18,7 +18,7 @@ export const templatesBlueprints: Blueprint[] = [
   },
   {
     id: "2",
-    pattern: "PATTERN 02",
+    name: "PATTERN 02",
     title: "Auth Stack",
     description:
       "Complete JWT authentication setup with login, register, middleware and routes. Works on both Lite and Clean architectures.",
@@ -32,7 +32,7 @@ export const templatesBlueprints: Blueprint[] = [
   },
   {
     id: "3",
-    pattern: "PATTERN 03",
+    name: "PATTERN 03",
     title: "CRUD API",
     description:
       "Full CRUD scaffold for a resource-driven API. Generates all routes, service and repository in one flow.",

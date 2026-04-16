@@ -1,0 +1,16 @@
+import { Navigate, Outlet } from "react-router";
+import { useAuth } from "../../context/useAuth";
+
+export function ProtectedRoutes() {
+  const { session, loading } = useAuth();
+
+  if (loading) {
+    return null;
+  }
+
+  if (!session) {
+    return <Navigate to="/auth" replace />;
+  }
+
+  return <Outlet />;
+}

@@ -7,34 +7,21 @@ import ProjectDetailPage from "./pages/ProjectDetail.page"
 import CommandBuilderPage from "./pages/CommandBuilder.page"
 import TemplatesPage from "./pages/Templates.page"
 import DocumentationPage from "./pages/Documentation.page"
+import { ProtectedRoutes } from "./components/layout/ProtectedRoutes"
+import { PublicOnlyRoute } from "./components/layout/PublicOnlyRoute"
+import { useAuth } from "./context/useAuth"
 
 function App() {
+  const { session } = useAuth();
+  const defaultLandingPath = session ? "/dashboard" : "/documentation";
+
   return (
     <Routes>
-      <Route index element={<Navigate to="/auth" replace />} />
-      <Route path="auth" element={<AuthPage />} />
-      <Route path="dashboard" element={
-        <Layout breadcrumbs={[{ label: "Project Dashboard" }]} searchPlaceholder="Search parameters...">
-          <DashboardPage />
-        </Layout>
-      } />
-      <Route path="projects" element={
-        <Layout breadcrumbs={[{ label: "Projects" }]} searchPlaceholder="Filter by project name...">
-          <ProjectsPage />
-        </Layout>
-      } />
+      <Route index element={<Navigate to={defaultLandingPath} replace />} />
 
-      <Route path="projects/:id" element={
-        <Layout breadcrumbs={[{ label: "Projects", to: "/projects" }, { label: "my-api-service" }]}>
-          <ProjectDetailPage />
-        </Layout>
-      } />
-      
-      <Route path="builder" element={
-        <Layout breadcrumbs={[{ label: "Command Builder" }]}>
-          <CommandBuilderPage />
-        </Layout>
-      } />
+      <Route element={<PublicOnlyRoute />}>
+        <Route path="auth" element={<AuthPage />} />
+      </Route>
 
       <Route path="templates" element={
         <Layout breadcrumbs={[{ label: "Gallery" }, { label: "Templates" }]} searchPlaceholder="Search blueprints...">
@@ -47,6 +34,32 @@ function App() {
           <DocumentationPage />
         </Layout>
       } />
+
+      <Route element={<ProtectedRoutes />}>
+        <Route path="dashboard" element={
+          <Layout breadcrumbs={[{ label: "Project Dashboard" }]} searchPlaceholder="Search parameters...">
+            <DashboardPage />
+          </Layout>
+        } />
+        <Route path="projects" element={
+          <Layout breadcrumbs={[{ label: "Projects" }]} searchPlaceholder="Filter by project name...">
+            <ProjectsPage />
+          </Layout>
+        } />
+
+        <Route path="projects/:id" element={
+          <Layout breadcrumbs={[{ label: "Projects", to: "/projects" }, { label: "my-api-service" }]}>
+            <ProjectDetailPage />
+          </Layout>
+        } />
+        
+        <Route path="builder" element={
+          <Layout breadcrumbs={[{ label: "Command Builder" }]}>
+            <CommandBuilderPage />
+          </Layout>
+        } />
+      </Route>
+
     </Routes>
   )
 }

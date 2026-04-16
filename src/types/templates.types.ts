@@ -1,6 +1,6 @@
 export interface Blueprint {
   id: string;
-  pattern: string;
+  name: string;
   title: string;
   description: string;
   command: string;

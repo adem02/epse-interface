@@ -6,7 +6,6 @@ import { SectionTitle } from "../components/documentation/SectionTitle";
 import { documentationSections } from "../data/documentation.data";
 import type { Section } from "../types/documentation.types";
 
-// --- Main ---
 export default function DocumentationPage() {
   const [activeSection, setActiveSection] = useState("getting-started");
   const sections: Section[] = documentationSections;

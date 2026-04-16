@@ -52,7 +52,7 @@ export function DetailModal({
               className="font-mono mb-1"
               style={{ fontSize: "9px", color: "#00E5FF", letterSpacing: "2px" }}
             >
-              {blueprint.pattern}
+              {blueprint.name}
             </p>
             <h2
               className="font-mono font-bold"
