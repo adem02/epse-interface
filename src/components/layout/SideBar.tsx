@@ -1,4 +1,8 @@
+import { useState } from "react";
 import { NavLink } from "react-router";
+import { useNavigate } from "react-router";
+import { AuthClient } from "../../lib/firebase/auth";
+import { useAuth } from "../../context/useAuth";
 
 const DashboardIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -40,11 +44,11 @@ const UserIcon = () => (
 );
 
 const navItems = [
-  { to: "/dashboard", label: "DASHBOARD", icon: <DashboardIcon /> },
-  { to: "/projects", label: "PROJECTS", icon: <ProjectsIcon /> },
-  { to: "/builder", label: "COMMAND BUILDER", icon: <BuilderIcon /> },
-  { to: "/templates", label: "TEMPLATES", icon: <TemplatesIcon /> },
-  { to: "/documentation", label: "DOCUMENTATION", icon: <TemplatesIcon /> },
+  { to: "/dashboard", label: "DASHBOARD", icon: <DashboardIcon />, isPublic: false },
+  { to: "/projects", label: "PROJECTS", icon: <ProjectsIcon />, isPublic: false },
+  { to: "/builder", label: "COMMAND BUILDER", icon: <BuilderIcon />, isPublic: false },
+  { to: "/templates", label: "TEMPLATES", icon: <TemplatesIcon />, isPublic: true },
+  { to: "/documentation", label: "DOCUMENTATION", icon: <TemplatesIcon />, isPublic: true },
 ];
 
 interface SidebarProps {
@@ -55,6 +59,36 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ user = { name: "Admin", role: "CLI Context" } }: SidebarProps) {
+  const { session } = useAuth();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const visibleNavItems = navItems.filter((item) => item.isPublic || !!session);
+  const profileName = [session?.user.firstname, session?.user.lastname].filter(Boolean).join(" ") || session?.user.email || user.name;
+
+  function handleSignIn() {
+    navigate("/auth", { replace: true });
+  }
+
+  async function handleLogout() {
+    if (!session) return;
+
+    setIsLoggingOut(true);
+    const error = await AuthClient.logout();
+
+    if (error) {
+      if (import.meta.env.DEV) {
+        console.error(error);
+      }
+      setIsLoggingOut(false);
+      return;
+    }
+
+    setIsProfileMenuOpen(false);
+    navigate("/auth", { replace: true });
+    setIsLoggingOut(false);
+  }
+
   return (
     <aside
       className="flex flex-col h-screen w-48 shrink-0"
@@ -101,7 +135,7 @@ export default function Sidebar({ user = { name: "Admin", role: "CLI Context" } 
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-0.5">
-        {navItems.map((item) => (
+        {visibleNavItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
@@ -131,33 +165,133 @@ export default function Sidebar({ user = { name: "Admin", role: "CLI Context" } 
 
       {/* User */}
       <div
-        className="px-5 py-4 flex items-center gap-3"
+        className="px-5 py-4 relative"
         style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
       >
-        <div
-          className="w-7 h-7 flex items-center justify-center shrink-0"
-          style={{
-            backgroundColor: "rgba(0,229,255,0.08)",
-            border: "1px solid rgba(0,229,255,0.15)",
-            borderRadius: "4px",
-          }}
-        >
-          <UserIcon />
-        </div>
-        <div>
-          <p
-            className="font-mono font-semibold"
-            style={{ fontSize: "11px", color: "#FFFFFF" }}
+        {!session ? (
+          <div
+            style={{
+              backgroundColor: "rgba(0,229,255,0.05)",
+              border: "1px solid rgba(0,229,255,0.22)",
+              borderRadius: "6px",
+              padding: "10px",
+            }}
           >
-            {user.name}
-          </p>
-          <p
-            className="font-mono"
-            style={{ fontSize: "9px", color: "#64748b", letterSpacing: "1px" }}
+            <p
+              className="font-mono"
+              style={{ fontSize: "9px", color: "#94a3b8", letterSpacing: "1px" }}
+            >
+              CONNECT FOR FULL ACCESS
+            </p>
+            <button
+              type="button"
+              className="mt-2 w-full font-mono px-2 py-2 transition-colors"
+              style={{
+                backgroundColor: "#00E5FF",
+                borderRadius: "4px",
+                border: "1px solid rgba(0,229,255,0.4)",
+                color: "#0a0e14",
+                fontSize: "10px",
+                letterSpacing: "1.5px",
+                fontWeight: 700,
+              }}
+              onClick={handleSignIn}
+            >
+              SIGN IN
+            </button>
+          </div>
+        ) : null}
+
+        {session && isProfileMenuOpen ? (
+          <div
+            className="absolute left-5 right-5"
+            style={{
+              bottom: "calc(100% - 6px)",
+              backgroundColor: "#0d1218",
+              border: "1px solid rgba(0,229,255,0.22)",
+              borderRadius: "6px",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
+              padding: "6px",
+              zIndex: 30,
+            }}
           >
-            {user.role}
-          </p>
-        </div>
+            <button
+              type="button"
+              className="w-full font-mono transition-colors px-2 py-2 text-left"
+              style={{
+                fontSize: "10px",
+                letterSpacing: "1.3px",
+                color: isLoggingOut ? "#94a3b8" : "#64748b",
+                border: "1px solid rgba(255,255,255,0.06)",
+                borderRadius: "4px",
+                backgroundColor: "rgba(255,255,255,0.02)",
+              }}
+              disabled={isLoggingOut}
+              onClick={handleLogout}
+              onMouseEnter={(e) => {
+                if (!isLoggingOut) {
+                  e.currentTarget.style.color = "#00E5FF";
+                  e.currentTarget.style.borderColor = "rgba(0,229,255,0.35)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = isLoggingOut ? "#94a3b8" : "#64748b";
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
+              }}
+            >
+              {isLoggingOut ? "LOGGING OUT..." : "LOG OUT"}
+            </button>
+          </div>
+        ) : null}
+
+        {session ? (
+          <button
+            type="button"
+            className="w-full flex items-center gap-3 px-2 py-2 rounded-sm transition-all"
+            style={{
+              border: isProfileMenuOpen
+                ? "1px solid rgba(0,229,255,0.28)"
+                : "1px solid rgba(255,255,255,0.06)",
+              backgroundColor: isProfileMenuOpen ? "rgba(0,229,255,0.06)" : "rgba(255,255,255,0.02)",
+            }}
+            onClick={() => setIsProfileMenuOpen((prev) => !prev)}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "rgba(0,229,255,0.35)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = isProfileMenuOpen
+                ? "rgba(0,229,255,0.28)"
+                : "rgba(255,255,255,0.06)";
+            }}
+          >
+            <div
+              className="w-7 h-7 flex items-center justify-center shrink-0"
+              style={{
+                backgroundColor: "rgba(0,229,255,0.08)",
+                border: "1px solid rgba(0,229,255,0.15)",
+                borderRadius: "4px",
+                color: "#00E5FF",
+              }}
+            >
+              <UserIcon />
+            </div>
+
+            <div className="text-left">
+              <p
+                className="font-mono font-semibold"
+                style={{ fontSize: "11px", color: "#FFFFFF" }}
+              >
+                {profileName}
+              </p>
+              <p
+                className="font-mono"
+                style={{ fontSize: "9px", color: "#64748b", letterSpacing: "1px" }}
+              >
+                Connected
+              </p>
+            </div>
+          </button>
+        ) : null}
       </div>
     </aside>
   );

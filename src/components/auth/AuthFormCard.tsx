@@ -5,7 +5,7 @@ export function AuthFormCard({
 }) {
   return (
     <div
-      className="relative w-full max-w-sm mx-4"
+      className="relative w-full"
       style={{
         backgroundColor: "#0f141a",
         border: "1px solid rgba(0,229,255,0.12)",

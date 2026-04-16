@@ -42,6 +42,17 @@
 }
 
 @layer components {
+  .auth-input:-webkit-autofill,
+  .auth-input:-webkit-autofill:hover,
+  .auth-input:-webkit-autofill:focus,
+  .auth-input:-webkit-autofill:active {
+    -webkit-text-fill-color: #94a3b8;
+    -webkit-box-shadow: 0 0 0 1000px #151a21 inset;
+    box-shadow: 0 0 0 1000px #151a21 inset;
+    caret-color: #94a3b8;
+    transition: background-color 9999s ease-in-out 0s;
+  }
+
   .btn-primary {
     @apply bg-primary text-background-deep px-4 py-2 rounded-sm font-semibold
            hover:opacity-90 active:scale-95 transition-all duration-100;

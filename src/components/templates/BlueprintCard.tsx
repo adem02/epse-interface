@@ -41,7 +41,7 @@ export function BlueprintCard({
           className="absolute bottom-3 left-4 font-mono font-bold"
           style={{ fontSize: "9px", color: "rgba(0,229,255,0.4)", letterSpacing: "2px" }}
         >
-          {blueprint.pattern}
+          {blueprint.name}
         </span>
       </div>
 

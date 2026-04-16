@@ -5,7 +5,6 @@ import { Header } from "../components/projects/Header";
 import { ProjectsFilters } from "../components/projects/ProjectsFilters";
 import { ProjectsList } from "../components/projects/ProjectsList";
 
-// --- Types ---
 interface Project {
   id: string;
   name: string;
@@ -16,7 +15,6 @@ interface Project {
   lastSync: string;
 }
 
-// --- Main ---
 export default function ProjectsPage() {
   const [view, setView] = useState<"grid" | "list">("grid");
   const [search, setSearch] = useState("");

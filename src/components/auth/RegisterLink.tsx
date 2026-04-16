@@ -1,15 +1,23 @@
-export function RegisterLink() {
+export function RegisterLink({
+  isRegisterMode,
+  onToggle,
+}: {
+  isRegisterMode: boolean;
+  onToggle: () => void;
+}) {
   return (
     <p
       className="text-center mt-6 font-mono"
       style={{ fontSize: "11px", color: "#64748b" }}
     >
-      New to the system?{" "}
+      {isRegisterMode ? "Already registered? " : "New to the system? "}
       <button
-        className="font-bold transition-colors"
+        type="button"
+        onClick={onToggle}
+        className="font-bold transition-colors cursor-pointer"
         style={{ color: "#00E5FF" }}
       >
-        Register Entity
+        {isRegisterMode ? "Log In" : "Register"}
       </button>
     </p>
   );

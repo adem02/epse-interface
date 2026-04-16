@@ -16,9 +16,21 @@ export interface Project {
 
 export interface EpseConfig {
   projectName: string;
-  projectType: "lite" | "clean";
+  projectType: ProjectType;
+  database?: boolean;
   auth: boolean;
   routes: { domaine: string; routeBasePath: string; }[];
   customMiddlewares: { name: string; }[];
+  lastSync?: string;
 }
 
+export interface RouteInterface {
+  domaine: string;
+  routeBasePath: string;
+}
+
+export interface CustomMiddlewareInterface {
+  name: string;
+}
+
+export type ProjectType = "clean" | "lite";
