@@ -1,11 +1,11 @@
-import { TypeBadge } from "../../pages/CommandBuilder.page";
-import type { RecentGeneration } from "../../types/command-builder.types";
+import { TypeBadge } from "../TypeBadge";
+import type { CopyHistoryInterface } from "../../types/command-builder.types";
 import { ClockIcon, CopyIcon } from "../ui/icons";
 
-export function RecentGenerations({
-  recentGenerations: recent,
+export function CopyHistory({
+  copyHistory,
 }: {
-  recentGenerations: RecentGeneration[];
+  copyHistory: CopyHistoryInterface[];
 }) {
   return (
     <>
@@ -16,7 +16,7 @@ export function RecentGenerations({
           Recent Generations
         </p>
         <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
-          {recent.map((item) => (
+          {copyHistory.map((item) => (
             <div
               key={item.id}
               className="p-4 transition-all cursor-pointer"
@@ -43,7 +43,7 @@ export function RecentGenerations({
               >
                 {item.command}
               </p>
-              <TypeBadge type={item.type} />
+              <TypeBadge type={item.type as "ROUTE" | "AUTH" | "SERVICE" | "MIDDLEWARE" | "REPOSITORY" | "GENERATE"} />
             </div>
           ))}
         </div>

@@ -1,54 +1,27 @@
 import { useState } from "react";
-import {
-  commandConfigs,
-  mockRecentGenerations,
-} from "../data/command-builder.data";
-import type { CommandType, RecentGeneration } from "../types/command-builder.types";
-import { RecentGenerations } from "../components/command-builder/RecentGenerations";
+import type { CommandBuildMode, CommandType } from "../types/command-builder.types";
+import { CopyHistory } from "../components/command-builder/CopyHistory";
 import { LivePreviewer } from "../components/command-builder/LivePreviewer";
 import { BuilderForm } from "../components/command-builder/BuilderForm";
-
-// --- Type badge ---
-export const TypeBadge = ({ type }: { type: string }) => (
-  <span
-    className="font-mono px-2 py-0.5"
-    style={{
-      fontSize: "9px",
-      letterSpacing: "1px",
-      borderRadius: "2px",
-      backgroundColor: "rgba(0,229,255,0.08)",
-      color: "#00E5FF",
-      border: "1px solid rgba(0,229,255,0.15)",
-    }}
-  >
-    {type}
-  </span>
-);
+import { useCopyHistory } from "../hooks/useCopyHistory";
 
 export default function CommandBuilderPage() {
+  console.log('<CommandBuilderPage /> rendered !');
   const [selectedCommand, setSelectedCommand] = useState<CommandType>("add route");
-  const [fieldValues, setFieldValues] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState(false);
-  const [recent] = useState<RecentGeneration[]>(mockRecentGenerations);
-
-  const config = commandConfigs[selectedCommand];
-
-  // TODO: implement command generation logic
-  const generatedCommand = "epse " + selectedCommand;
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(generatedCommand);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleFieldChange = (key: string, value: string) => {
-    setFieldValues((prev) => ({ ...prev, [key]: value }));
-  };
+  const [generatedCommand, setGeneratedCommand] = useState('');
+  const [mode, setMode] = useState<CommandBuildMode>("interactive");
+  const {copyHistory, addRecentCopied} = useCopyHistory();
 
   const handleCommandChange = (cmd: CommandType) => {
     setSelectedCommand(cmd);
-    setFieldValues({});
+  };
+
+  const handleCopy = (generatedCommand: string) => {    
+    navigator.clipboard.writeText(generatedCommand);
+    setCopied(true);
+    addRecentCopied(mode, selectedCommand, generatedCommand);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -67,11 +40,11 @@ export default function CommandBuilderPage() {
         <div className="flex-1 space-y-4">
           <BuilderForm 
             selectedCommand={selectedCommand}
-            onCommandChange={handleCommandChange}
-            config={config}
-            fieldValues={fieldValues}
-            onFieldChange={handleFieldChange}
-           />
+            setSelectedCommand={(cmd) => handleCommandChange(cmd)}
+            setGeneratedCommand={setGeneratedCommand}
+            mode={mode}
+            setMode={setMode}
+          />
         </div>
 
         <div
@@ -79,7 +52,7 @@ export default function CommandBuilderPage() {
           style={{ width: "380px", flexShrink: 0 }}
         >
           <LivePreviewer
-            generatedCommand={generatedCommand}
+            commandToCopy={mode === 'interactive' ? 'epse ' + selectedCommand : generatedCommand}
             onCopy={handleCopy}
             copied={copied}
           />
@@ -87,7 +60,7 @@ export default function CommandBuilderPage() {
       </div>
 
       <div>
-        <RecentGenerations recentGenerations={recent} />
+        <CopyHistory copyHistory={copyHistory} />
       </div>
     </div>
   );

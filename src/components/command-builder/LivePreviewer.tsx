@@ -1,12 +1,12 @@
 import { CopyIcon } from "../ui/icons";
 
 export function LivePreviewer({
-  generatedCommand,
+  commandToCopy,
   onCopy,
   copied,
 }: {
-  generatedCommand: string;
-  onCopy: () => void;
+  commandToCopy: string;
+  onCopy: (commandToCopy: string) => void;
   copied: boolean;
 }) {
   return (
@@ -51,7 +51,7 @@ export function LivePreviewer({
 
         <div className="flex-1 p-4">
           <p className="font-mono" style={{ fontSize: "13px", color: "#00E5FF", lineHeight: "1.8" }}>
-            $ {generatedCommand}
+            $ {commandToCopy}
           </p>
           <p className="font-mono mt-4" style={{ fontSize: "10px", color: "#64748b" }}>
             # Command ready to execute
@@ -60,7 +60,7 @@ export function LivePreviewer({
 
         <div className="p-4" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
           <button
-            onClick={onCopy}
+            onClick={() => onCopy(commandToCopy)}
             className="w-full flex items-center justify-center gap-2 py-2.5 font-mono font-bold transition-all active:scale-[0.98]"
             style={{
               backgroundColor: copied ? "rgba(0,229,255,0.1)" : "#00E5FF",
