@@ -6,7 +6,6 @@ import { BuilderForm } from "../components/command-builder/BuilderForm";
 import { useCopyHistory } from "../hooks/useCopyHistory";
 
 export default function CommandBuilderPage() {
-  console.log('<CommandBuilderPage /> rendered !');
   const [selectedCommand, setSelectedCommand] = useState<CommandType>("add route");
   const [copied, setCopied] = useState(false);
   const [generatedCommand, setGeneratedCommand] = useState('');
