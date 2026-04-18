@@ -1,4 +1,17 @@
-import type { CommandConfigs, RecentGeneration } from "../types/command-builder.types";
+import type { CommandConfigs, CommandType, CommandTypeLabel } from "../types/command-builder.types";
+
+export const mapCommandTypeToLabel = (commandType: CommandType): CommandTypeLabel => {
+  const mappedCommandToLabel: Record<CommandType, CommandTypeLabel> = {
+    'generate': 'GENERATE',
+    'add auth': 'AUTH',
+    'add middleware': 'MIDDLEWARE',
+    'add repository': 'MIDDLEWARE',
+    'add route': 'ROUTE',
+    'add service': 'SERVICE'
+  }
+
+  return mappedCommandToLabel[commandType];
+};
 
 export const commandConfigs: CommandConfigs = {
   generate: {
@@ -42,8 +55,3 @@ export const commandConfigs: CommandConfigs = {
   },
 };
 
-export const mockRecentGenerations: RecentGeneration[] = [
-  { id: "1", command: "epse add route user /users --method GET --controller GetUsers", type: "ROUTE", time: "2 min ago" },
-  { id: "2", command: "epse add auth", type: "AUTH", time: "15 min ago" },
-  { id: "3", command: "epse add service email", type: "SERVICE", time: "1 hour ago" },
-];
