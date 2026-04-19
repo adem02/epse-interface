@@ -3,7 +3,7 @@ import type { CommandBuildMode, CommandType } from "../types/command-builder.typ
 import { CopyHistory } from "../components/command-builder/CopyHistory";
 import { LivePreviewer } from "../components/command-builder/LivePreviewer";
 import { BuilderForm } from "../components/command-builder/BuilderForm";
-import { useCopyHistory } from "../hooks/useCopyHistory";
+import { useCopyHistory } from "../hooks/useCopyHistory.hook";
 
 export default function CommandBuilderPage() {
   const [selectedCommand, setSelectedCommand] = useState<CommandType>("add route");

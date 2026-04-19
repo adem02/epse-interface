@@ -3,10 +3,11 @@ import AuthPage from "./pages/Auth.page"
 import Layout from "./components/layout/Layout"
 import DashboardPage from "./pages/Dashboard.page"
 import ProjectsPage from "./pages/Projects.page"
-import ProjectDetailPage from "./pages/ProjectDetail.page"
+import ProjectDetailsPage from "./pages/ProjectDetails.page"
 import CommandBuilderPage from "./pages/CommandBuilder.page"
 import TemplatesPage from "./pages/Templates.page"
 import DocumentationPage from "./pages/Documentation.page"
+import NotFoundPage from "./pages/NotFound.page"
 import { ProtectedRoutes } from "./components/layout/ProtectedRoutes"
 import { PublicOnlyRoute } from "./components/layout/PublicOnlyRoute"
 import { useAuth } from "./context/useAuth"
@@ -48,8 +49,8 @@ function App() {
         } />
 
         <Route path="projects/:id" element={
-          <Layout breadcrumbs={[{ label: "Projects", to: "/projects" }, { label: "my-api-service" }]}>
-            <ProjectDetailPage />
+          <Layout breadcrumbs={[{ label: "Projects", to: "/projects" }, { label: "Project Details" }]} searchPlaceholder="Search in project...">
+            <ProjectDetailsPage />
           </Layout>
         } />
         
@@ -59,6 +60,12 @@ function App() {
           </Layout>
         } />
       </Route>
+
+      <Route path="*" element={
+        <Layout breadcrumbs={[{ label: "404" }, { label: "Not Found" }]} searchPlaceholder="Search a valid route...">
+          <NotFoundPage />
+        </Layout>
+      } />
 
     </Routes>
   )

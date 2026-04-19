@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import type { Project } from "../../types/project.types";
 import { TypeBadge } from "../TypeBadge";
 import { AuthBadge } from "./AuthBadge";
@@ -10,6 +11,8 @@ export function ProjectsList({
   view: "grid" | "list";
   filtered: Project[]
 }) {
+  const navigate = useNavigate();
+
   return (
     <>
       {view === "grid" ? (
@@ -48,7 +51,8 @@ export function ProjectsList({
                 {new Date(project.lastSync).toLocaleDateString()}
               </p>
               <button
-                className="font-mono font-bold"
+                onClick={() => navigate(`/projects/${project.id}`)}
+                className="font-mono font-bold hover:underline transition-colors cursor-pointer"
                 style={{ fontSize: "10px", color: "#00E5FF", letterSpacing: "1px" }}
               >
                 DETAILS &gt;

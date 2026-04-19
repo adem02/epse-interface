@@ -1,15 +1,8 @@
-import { useRef } from "react";
-import { ImportIcon } from "../ui/icons";
-
 export function Header({
   setShowNewProject,
-  onFileImport,
 }: {
   setShowNewProject: (show: boolean) => void;
-  onFileImport: (file: File) => void;
 }) {
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
   return (
     <div className="flex items-start justify-between">
       <div>
@@ -21,28 +14,6 @@ export function Header({
         </p>
       </div>
       <div className="flex gap-2">
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          className="flex items-center gap-2 px-3 py-2 font-mono font-bold transition-all"
-          style={{
-            backgroundColor: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: "4px",
-            color: "#94a3b8",
-            fontSize: "10px",
-            letterSpacing: "1px",
-          }}
-        >
-          <ImportIcon />
-          IMPORT PROJECT
-        </button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".json"
-          className="hidden"
-          onChange={(e) => e.target.files?.[0] && onFileImport(e.target.files[0])}
-        />
         <button
           onClick={() => setShowNewProject(true)}
           className="flex items-center gap-2 px-3 py-2 font-mono font-bold transition-all"

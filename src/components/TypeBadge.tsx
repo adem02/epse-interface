@@ -1,16 +1,11 @@
-type BadgeType =
-  | "CLEAN"
-  | "LITE"
-  | "ROUTE"
-  | "AUTH"
-  | "SERVICE"
-  | "MIDDLEWARE"
-  | "REPOSITORY"
-  | "GENERATE";
+import type { CommandTypeLabel } from "../types/command-builder.types";
+import type { ProjectType } from "../types/project.types";
+
+type BadgeType = ProjectType | CommandTypeLabel;
 
 export function TypeBadge({ type }: { type: BadgeType }) {
   const kind = type.toUpperCase() as BadgeType;
-  const isProjectType = kind === "CLEAN" || kind === "LITE";
+  const isProjectType = kind === "clean" || kind === "lite";
 
   return (
     <span
@@ -20,19 +15,19 @@ export function TypeBadge({ type }: { type: BadgeType }) {
         letterSpacing: "1px",
         borderRadius: "2px",
         backgroundColor:
-          isProjectType && kind === "CLEAN"
+          isProjectType && kind === "clean"
             ? "rgba(0,229,255,0.1)"
             : isProjectType
               ? "rgba(148,163,184,0.1)"
               : "rgba(0,229,255,0.08)",
         color:
-          isProjectType && kind === "CLEAN"
+          isProjectType && kind === "clean"
             ? "#00E5FF"
             : isProjectType
               ? "#94a3b8"
               : "#00E5FF",
         border: `1px solid ${
-          isProjectType && kind === "CLEAN"
+          isProjectType && kind === "clean"
             ? "rgba(0,229,255,0.2)"
             : isProjectType
               ? "rgba(148,163,184,0.2)"
@@ -40,7 +35,7 @@ export function TypeBadge({ type }: { type: BadgeType }) {
         }`,
       }}
     >
-      {kind}
+      {kind.toUpperCase()}
     </span>
   )
 }

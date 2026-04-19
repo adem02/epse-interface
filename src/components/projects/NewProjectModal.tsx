@@ -1,16 +1,28 @@
 import { useState } from "react";
-import { CloseIcon, CopyIcon } from "../ui/icons";
+import { ChevronDown, CloseIcon, CopyIcon } from "../ui/icons";
 
-export function NewProjectModal({ onClose }: { onClose: () => void }) {
-  const [copied, setCopied] = useState<string | null>(null);
-  const [selectedType, setSelectedType] = useState<"lite" | "clean">("lite");
+export function NewProjectModal({
+  onClose,
+  onSaveProject
+}: {
+  onClose: () => void,
+  onSaveProject: (projectName: string, projectType: string) => Promise<void>
+}) {
+  const [projectName, setProjectName] = useState('');
+  const [selectedProjectType, setSelectedProjectType] = useState('');
+  const [canSaveProject, setCanSaveProject] = useState(false)
+  const [destionation, setDestionation] = useState('')
+  const [copied, setCopied] = useState(false);
+  const commandPreview = `epse generate ${projectName ? projectName : '<project-name>'} ${destionation ? destionation : '<destination>'} --${selectedProjectType ? selectedProjectType : '<lite|clean>'}`;
+  const canCopyCommand = Boolean(projectName.trim() && selectedProjectType && destionation.trim());
 
-  const command = `epse generate my-project --${selectedType}`;
+  const handleCopyCommand = async () => {
+    if (!canCopyCommand) return;
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(command);
-    setCopied(command);
-    setTimeout(() => setCopied(null), 2000);
+    await navigator.clipboard.writeText(commandPreview);
+    setCopied(true);
+    setCanSaveProject(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -46,28 +58,118 @@ export function NewProjectModal({ onClose }: { onClose: () => void }) {
         </div>
 
         <p className="font-mono mb-5" style={{ fontSize: "11px", color: "#64748b" }}>
-          Select an architecture and run the command in your terminal.
+          Prepare the project, generate the CLI command, copy it, then save.
         </p>
 
-        <div className="flex gap-2 mb-5">
-          {(["lite", "clean"] as const).map((type) => (
-            <button
-              key={type}
-              onClick={() => setSelectedType(type)}
-              className="flex-1 py-2 font-mono font-bold uppercase transition-all"
-              style={{
-                fontSize: "10px",
-                letterSpacing: "2px",
-                borderRadius: "4px",
-                backgroundColor:
-                  selectedType === type ? "rgba(0,229,255,0.1)" : "rgba(255,255,255,0.03)",
-                border: `1px solid ${selectedType === type ? "rgba(0,229,255,0.3)" : "rgba(255,255,255,0.06)"}`,
-                color: selectedType === type ? "#00E5FF" : "#64748b",
-              }}
+        <form className="space-y-4 mb-5">
+          <div>
+            <label
+              htmlFor="projectName"
+              className="block font-mono mb-1.5"
+              style={{ fontSize: "9px", color: "#64748b", letterSpacing: "1.5px" }}
             >
-              {type}
-            </button>
-          ))}
+              PROJECT NAME
+            </label>
+            <input
+              id="projectName"
+              name="projectName"
+              type="text"
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value)}
+              placeholder="my-project"
+              className="w-full px-3 py-2 font-mono outline-none"
+              style={{
+                backgroundColor: "#0a0e14",
+                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: "4px",
+                color: "#FFFFFF",
+                fontSize: "12px",
+              }}
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="projectType"
+              className="block font-mono mb-1.5"
+              style={{ fontSize: "9px", color: "#64748b", letterSpacing: "1.5px" }}
+            >
+              PROJECT TYPE
+            </label>
+            <div className="relative">
+              <select
+                id="projectType"
+                name="projectType"
+                value={selectedProjectType}
+                onChange={e => setSelectedProjectType(e.target.value)}
+                className="w-full px-4 py-3 font-mono outline-none appearance-none transition-all"
+                style={{
+                  backgroundColor: "#0f141a",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  borderRadius: "4px",
+                  color: "#FFFFFF",
+                  fontSize: "13px",
+                }}
+              >
+                <option value="" disabled>
+                  Select project type
+                </option>
+                <option value="lite">lite</option>
+                <option value="clean">clean</option>
+              </select>
+              <span
+                className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
+                style={{ color: "#64748b" }}
+              >
+                <ChevronDown />
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="destination"
+              className="block font-mono mb-1.5"
+              style={{ fontSize: "9px", color: "#64748b", letterSpacing: "1.5px" }}
+            >
+              DESTINATION
+            </label>
+            <input
+              id="destination"
+              name="destination"
+              type="text"
+              value={destionation}
+              onChange={e => setDestionation(e.target.value)}
+              placeholder="."
+              className="w-full px-3 py-2 font-mono outline-none"
+              style={{
+                backgroundColor: "#0a0e14",
+                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: "4px",
+                color: "#FFFFFF",
+                fontSize: "12px",
+              }}
+            />
+            <p className="mt-1 font-mono" style={{ fontSize: "10px", color: "#64748b" }}>
+              Use . to generate in the current terminal directory.
+            </p>
+          </div>
+        </form>
+
+        <div
+          className="p-3 mb-3 font-mono"
+          style={{
+            backgroundColor: "rgba(0,229,255,0.08)",
+            border: "1px solid rgba(0,229,255,0.3)",
+            borderRadius: "4px",
+          }}
+        >
+          <p style={{ fontSize: "10px", color: "#00E5FF", fontWeight: "bold", letterSpacing: "1px", marginBottom: "4px" }}>
+            STEP 1: COPY THE COMMAND
+          </p>
+          <p style={{ fontSize: "9px", color: "#cbd5e1" }}>
+            Copy the command below and run it in your terminal. This is required before you can save the project.
+          </p>
         </div>
 
         <div
@@ -78,22 +180,64 @@ export function NewProjectModal({ onClose }: { onClose: () => void }) {
             borderRadius: "4px",
           }}
         >
-          <code className="font-mono" style={{ fontSize: "12px", color: "#00E5FF" }}>
-            $ {command}
+          <code
+            onClick={handleCopyCommand}
+            className="font-mono"
+            style={{
+              fontSize: "12px",
+              color: "#00E5FF",
+              cursor: canCopyCommand ? "pointer" : "not-allowed",
+              opacity: canCopyCommand ? 1 : 0.7,
+            }}
+            title={canCopyCommand ? "Click to copy" : "Fill all fields to copy"}
+          >
+            $ {commandPreview}
           </code>
           <button
-            onClick={handleCopy}
+            type="button"
+            disabled={!canCopyCommand}
+            onClick={handleCopyCommand}
             className="transition-colors ml-3 shrink-0"
-            style={{ color: copied ? "#00E5FF" : "#64748b" }}
+            style={{ color: copied ? "#00E5FF" : canCopyCommand ? "#64748b" : "#334155" }}
+            aria-label={copied ? "Copied" : "Copy command"}
           >
-            <CopyIcon />
+            {copied ? (
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            ) : (
+              <CopyIcon />
+            )}
           </button>
         </div>
-        {copied && (
-          <p className="font-mono" style={{ fontSize: "10px", color: "#00E5FF" }}>
-            Copied to clipboard
-          </p>
-        )}
+
+        <button
+          type="button"
+          onClick={() => onSaveProject(projectName, selectedProjectType)}
+          disabled={!canSaveProject}
+          className="w-full py-2 font-mono font-bold tracking-widest transition-all"
+          style={{
+            fontSize: "10px",
+            backgroundColor: canSaveProject ? "#00E5FF" : "rgba(255,255,255,0.04)",
+            color: canSaveProject ? "#0a0e14" : "#64748b",
+            border: `1px solid ${canSaveProject ? "rgba(0,229,255,0.35)" : "rgba(255,255,255,0.08)"}`,
+            borderRadius: "4px",
+            cursor: canSaveProject ? "pointer" : "not-allowed",
+          }}
+        >
+          SAVE PROJECT
+        </button>
+
+        <p className="font-mono mt-2" style={{ fontSize: "9px", color: canSaveProject ? "#00E5FF" : "#64748b", fontWeight: canSaveProject ? "bold" : "normal" }}>
+          {canSaveProject ? "(✓) STEP 2: Save and register your project" : "Copy the command first to unlock this step"}
+        </p>
       </div>
     </div>
   );
