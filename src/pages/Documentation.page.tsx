@@ -34,6 +34,7 @@ export default function DocumentationPage() {
               style={{
                 fontSize: "11px",
                 color: activeSection === section.id ? "#FFFFFF" : "#64748b",
+                cursor: "pointer",
                 borderLeft: `2px solid ${activeSection === section.id ? "#00E5FF" : "transparent"}`,
                 backgroundColor: activeSection === section.id ? "rgba(0,229,255,0.04)" : "transparent",
               }}
@@ -70,9 +71,9 @@ export default function DocumentationPage() {
             EPSE CLI Documentation
           </h1>
           <p className="font-mono" style={{ fontSize: "12px", color: "#64748b", lineHeight: "1.8", maxWidth: "580px" }}>
-            EPSE is a CLI tool that generates production-ready Node.js/Express/TypeScript project structures.
-            It supports two architectures — Lite and Clean — and provides commands to scaffold routes,
-            middlewares, auth, services and repositories.
+            EPSE is a CLI tool for generating Node.js, Express and TypeScript backends with a consistent project structure.
+            It supports Lite and Clean architectures, then lets you extend the generated project with routes,
+            auth, services, repositories and custom middlewares.
           </p>
         </div>
 
@@ -80,14 +81,14 @@ export default function DocumentationPage() {
         <section className="space-y-4">
           <SectionTitle id="getting-started">Getting Started</SectionTitle>
           <p className="font-mono" style={{ fontSize: "12px", color: "#64748b", lineHeight: "1.8" }}>
-            EPSE works inside any existing Node.js project or generates a fresh one from scratch.
-            Start by generating a project, then use the <code style={{ color: "#00E5FF" }}>add</code> commands
-            to scaffold resources one by one.
+            Start by generating a new project, then run the <code style={{ color: "#00E5FF" }}>add</code> commands inside that project root.
+            Routes, services, repositories and custom middlewares are appended incrementally, while <code style={{ color: "#00E5FF" }}>epse add auth</code>
+            scaffolds the full authentication system in one step.
           </p>
           <div className="grid gap-3" style={{ gridTemplateColumns: "1fr 1fr" }}>
             {[
-              { title: "Lite Architecture", desc: "Minimal Express/TypeScript structure for straightforward APIs." },
-              { title: "Clean Architecture", desc: "Full TSOA + tsyringe structure with use cases and gateway pattern." },
+              { title: "Lite Architecture", desc: "A straightforward Express and TypeScript structure for shipping classic REST APIs quickly." },
+              { title: "Clean Architecture", desc: "A layered structure for teams that want stronger boundaries around services, repositories and use cases." },
             ].map((card) => (
               <div
                 key={card.title}
@@ -192,16 +193,42 @@ export default function DocumentationPage() {
         <section className="space-y-4">
           <SectionTitle id="commands">Commands</SectionTitle>
           <p className="font-mono" style={{ fontSize: "12px", color: "#64748b", lineHeight: "1.8" }}>
-            All commands support an interactive mode — simply omit the arguments.
+            Use the generated project root as your working directory for every <code style={{ color: "#00E5FF" }}>epse add ...</code> command.
+            For routes, <code style={{ color: "#00E5FF" }}>GET</code> is the default method, so only specify <code style={{ color: "#00E5FF" }}>--method=...</code> for other verbs.
           </p>
           <div className="space-y-3">
-            <CommandRow cmd="epse generate <name> --lite | --clean" description="Generates a new project structure with the selected architecture." tag="GENERATE" />
-            <CommandRow cmd="epse add route <domain> <url> --method --controller" description="Generates a controller and registers the route. Supports --crud flag." tag="ROUTE" />
-            <CommandRow cmd="epse add middleware <name>" description="Generates a custom Express middleware in src/middlewares/." tag="MIDDLEWARE" />
-            <CommandRow cmd="epse add auth" description="Generates a complete JWT authentication system with login, register and middleware." tag="AUTH" />
-            <CommandRow cmd="epse add service <name>" description="Generates a service class in the appropriate directory." tag="SERVICE" />
-            <CommandRow cmd="epse add repository <name>" description="Generates a repository class. For Clean, also generates the gateway interface." tag="REPOSITORY" />
+            <CommandRow cmd="epse generate <name> [destination] --lite|--clean" description="Creates a new EPSE project in the selected architecture. Use . as destination to generate in the current directory." tag="GENERATE" />
+            <CommandRow cmd="epse add route <domain> <url> --controller=<name> [--method=POST]" description="Generates a controller and registers the route. Omit --method for GET routes." tag="ROUTE" />
+            <CommandRow cmd="epse add middleware <name>" description="Generates a custom middleware that is tracked in epseconfig.json." tag="MIDDLEWARE" />
+            <CommandRow cmd="epse add auth" description="Generates the authentication system automatically, including auth routes and middleware wiring." tag="AUTH" />
+            <CommandRow cmd="epse add service <name>" description="Generates a service class for a domain or feature." tag="SERVICE" />
+            <CommandRow cmd="epse add repository <name>" description="Generates a repository. In Clean architecture, the corresponding interface boundary is generated as well." tag="REPOSITORY" />
           </div>
+
+          <div className="grid gap-3" style={{ gridTemplateColumns: "1fr 1fr" }}>
+            <CodeBlock
+              title="COMMON EXAMPLES"
+              lines={[
+                "$ epse generate my-api . --lite",
+                "$ epse add route user /users --controller=GetUsers",
+                "$ epse add route user /users --controller=CreateUser --method=POST",
+                "$ epse add service user",
+              ]}
+            />
+            <CodeBlock
+              title="AUTH + CLEAN EXAMPLE"
+              lines={[
+                "$ epse generate commerce-core . --clean",
+                "$ epse add auth",
+                "$ epse add repository product",
+                "$ epse add middleware auditTrail",
+              ]}
+            />
+          </div>
+
+          <Note>
+            Cobra accepts both <code style={{ color: "#00E5FF" }}>--method POST</code> and <code style={{ color: "#00E5FF" }}>--method=POST</code>, but this documentation uses the <code style={{ color: "#00E5FF" }}>--flag=value</code> form consistently.
+          </Note>
         </section>
 
         {/* Configuration */}
@@ -209,7 +236,7 @@ export default function DocumentationPage() {
           <SectionTitle id="configuration">Configuration</SectionTitle>
           <p className="font-mono" style={{ fontSize: "12px", color: "#64748b", lineHeight: "1.8" }}>
             EPSE maintains an <code style={{ color: "#00E5FF" }}>epseconfig.json</code> file at the root
-            of your project to track generated resources.
+            of your project to track generated resources and project metadata.
           </p>
           <CodeBlock
             title="EPSECONFIG.JSON"
@@ -217,19 +244,20 @@ export default function DocumentationPage() {
               '{',
               '  "projectName": "my-api",',
               '  "projectType": "lite",',
-              '  "auth": false,',
+              '  "database": false,',
+              '  "auth": true,',
               '  "routes": [',
               '    { "domaine": "user", "routeBasePath": "/users" }',
               '  ],',
               '  "customMiddlewares": [',
-              '    { "name": "logger" }',
+              '    { "name": "rateLimiter" }',
               '  ]',
               '}',
             ]}
           />
           <Note>
             Do not edit <code style={{ color: "#00E5FF" }}>epseconfig.json</code> manually.
-            It is managed automatically by EPSE commands.
+            It is managed automatically by EPSE commands as you generate resources.
           </Note>
         </section>
       </div>
@@ -251,6 +279,7 @@ export default function DocumentationPage() {
               style={{
                 fontSize: "11px",
                 color: activeSection === section.id ? "#00E5FF" : "#64748b",
+                cursor: "pointer",
                 padding: "3px 0",
               }}
             >
@@ -259,7 +288,7 @@ export default function DocumentationPage() {
           ))}
         </nav>
 
-        {/* Discord card */}
+        {/* Source card */}
         <div
           className="mt-6 p-3"
           style={{
@@ -269,17 +298,20 @@ export default function DocumentationPage() {
           }}
         >
           <p className="font-mono font-bold mb-1" style={{ fontSize: "11px", color: "#FFFFFF" }}>
-            Need help?
+            Source Code
           </p>
           <p className="font-mono mb-3" style={{ fontSize: "10px", color: "#64748b" }}>
-            Join the community to chat with other architects.
+            Explore EPSE implementation, releases and updates on GitHub.
           </p>
-          <button
+          <a
+            href="https://github.com/adem02/epse"
+            target="_blank"
+            rel="noreferrer"
             className="font-mono transition-colors"
-            style={{ fontSize: "10px", color: "#00E5FF" }}
+            style={{ fontSize: "10px", color: "#00E5FF", cursor: "pointer" }}
           >
-            Join the Discord →
-          </button>
+            Open EPSE on GitHub →
+          </a>
         </div>
       </div>
     </div>
