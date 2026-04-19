@@ -86,6 +86,7 @@ export function BlueprintCard({
               borderRadius: "4px",
               fontSize: "10px",
               letterSpacing: "1.5px",
+              cursor: "pointer",
               border: copied ? "1px solid rgba(0,229,255,0.3)" : "none",
             }}
           >
@@ -100,6 +101,7 @@ export function BlueprintCard({
               border: "1px solid rgba(255,255,255,0.06)",
               borderRadius: "4px",
               color: "#64748b",
+              cursor: "pointer",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = "#94a3b8";
