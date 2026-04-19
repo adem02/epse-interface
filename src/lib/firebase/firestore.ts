@@ -1,7 +1,7 @@
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc, type DocumentData } from "firebase/firestore";
 import { firestoreClient } from "./app";
 
-export class FirestoreCLient {
+export class FirestoreClient {
   static async createDocument<T extends DocumentData>(dbCollection: string, data: T): Promise<string | undefined> {
     const docRef = await addDoc(
       collection(firestoreClient, dbCollection),
@@ -11,11 +11,11 @@ export class FirestoreCLient {
     return docRef.id;
   }
 
-  static async getDocumentById(dbCollection: string, id: string) {
+  static async getDocumentById<T extends DocumentData>(dbCollection: string, id: string): Promise<T|null> {
     const docRef = doc(firestoreClient, dbCollection, id);
     const docSnap = await getDoc(docRef);
 
-    return docSnap.exists() ? docSnap.data() : null;
+    return docSnap.exists() ? {id: docSnap.id, ...docSnap.data() as T} : null;
   }
 
   static async getDocuments<T extends DocumentData>(dbCollection: string): Promise<T[]> {

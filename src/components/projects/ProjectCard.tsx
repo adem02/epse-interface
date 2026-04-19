@@ -1,19 +1,12 @@
 import { AuthBadge } from "./AuthBadge";
 import { TypeBadge } from "../TypeBadge";
+import type { Project } from "../../types/project.types";
+import { useNavigate } from "react-router";
 
-interface ProjectCardProject {
-  id: string;
-  name: string;
-  type: "CLEAN" | "LITE";
-  auth: boolean;
-  routes: { domaine: string; routeBasePath: string }[];
-  customMiddlewares: { name: string }[];
-  lastSync: string;
-}
-
-export function ProjectCard({ project }: { project: ProjectCardProject }) {
-  const formatDate = (iso: string) =>
-    new Date(iso).toLocaleDateString("en-US", {
+export function ProjectCard({ project }: { project: Project }) {
+  const navigate = useNavigate();
+  const formatDate = (date: Date) =>
+    date.toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
       hour: "2-digit",
@@ -22,6 +15,7 @@ export function ProjectCard({ project }: { project: ProjectCardProject }) {
 
   return (
     <div
+      onClick={() => navigate(`/projects/${project.id}`)}
       className="p-4 flex flex-col gap-3 cursor-pointer transition-all"
       style={{
         backgroundColor: "#0f141a",
@@ -62,12 +56,6 @@ export function ProjectCard({ project }: { project: ProjectCardProject }) {
             {formatDate(project.lastSync)}
           </p>
         </div>
-        <button
-          className="font-mono font-bold transition-colors"
-          style={{ fontSize: "10px", color: "#00E5FF", letterSpacing: "1px" }}
-        >
-          DETAILS &gt;
-        </button>
       </div>
     </div>
   );

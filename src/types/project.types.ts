@@ -7,21 +7,23 @@ export interface ProjectPreview {
 export interface Project {
   id: string;
   name: string;
-  type: "CLEAN" | "LITE";
+  type: ProjectType;
+  controllersPath?: string;
+  database: boolean;
   auth: boolean;
   routes: { domaine: string; routeBasePath: string; }[];
   customMiddlewares: { name: string; }[];
-  lastSync: string;
+  lastSync: Date;
 }
 
 export interface EpseConfig {
   projectName: string;
   projectType: ProjectType;
-  database?: boolean;
+  controllersPath?: string;
+  database: boolean;
   auth: boolean;
   routes: { domaine: string; routeBasePath: string; }[];
   customMiddlewares: { name: string; }[];
-  lastSync?: string;
 }
 
 export interface RouteInterface {
