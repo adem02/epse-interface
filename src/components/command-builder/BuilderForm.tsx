@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { CommandBuildMode, CommandType } from "../../types/command-builder.types";
 import { ChevronDown, TerminalIcon } from "../ui/icons";
+import { GenerateGuidance } from "./GenerateGuidance";
 import { Field } from "./Field";
 import { commandConfigs } from "../../utils/command-builder.utils";
 import { CommandBuilderService } from "../../services/CommandBuilder.service";
@@ -23,6 +24,7 @@ export function BuilderForm({
   const [fieldValues, setFieldValues] = useState<Record<string, string>>({});
   const [formErrors, setFormErrors] = useState<string[]>([]);
   const config = commandConfigs[selectedCommand];
+  const isGenerateCommand = selectedCommand === "generate";
 
   const handleFieldChange = (key: string, value: string) => {
     setFieldValues((prev) => ({ ...prev, [key]: value }));
@@ -93,8 +95,11 @@ export function BuilderForm({
         </p>
       </div>
 
+      {/* Generate guidance */}
+      {isGenerateCommand && <GenerateGuidance />}
+
       {/* Execution Mode */}
-      <div>
+      {!isGenerateCommand && <div>
         <ExecutionMode
           mode={mode}
           selectedCommand={selectedCommand}
@@ -102,9 +107,9 @@ export function BuilderForm({
           isAuthCommandSelected={isAuthCommandSelected}
           setMode={setMode}
         />
-      </div>
+      </div>}
 
-      {mode === "interactive" && (
+      {!isGenerateCommand && mode === "interactive" && (
         <div
           className="p-4 space-y-3"
           style={{
@@ -147,7 +152,7 @@ export function BuilderForm({
       )}
 
       {/* Parameters Errors */}
-      {mode === "manual" && formErrors.length > 0 && (
+      {!isGenerateCommand && mode === "manual" && formErrors.length > 0 && (
         <div
           className="p-4 space-y-2"
           role="alert"
@@ -162,7 +167,7 @@ export function BuilderForm({
         </div>
       )}
 
-      {mode === "manual" && config.fields.length > 0 && (
+      {!isGenerateCommand && mode === "manual" && config.fields.length > 0 && (
         <div
           className="p-4 space-y-4"
           style={{
@@ -200,7 +205,7 @@ export function BuilderForm({
         </div>
       )}
 
-      {mode === "manual" && config.fields.length === 0 && (
+      {!isGenerateCommand && mode === "manual" && config.fields.length === 0 && (
         <div
           className="p-4 flex items-center gap-3"
           style={{
@@ -216,13 +221,13 @@ export function BuilderForm({
         </div>
       )}
 
-      {mode === "manual" && (
+      {!isGenerateCommand && mode === "manual" && (
         <p className="font-mono" style={{ fontSize: "10px", color: "#64748b" }}>
           Build Command will output a ready-to-copy command with your selected arguments.
         </p>
       )}
 
-      {mode === "manual" && !isAuthCommandSelected(selectedCommand) && (
+      {!isGenerateCommand && mode === "manual" && !isAuthCommandSelected(selectedCommand) && (
         <button
           type="button"
           onClick={handleBuildCommand}

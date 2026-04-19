@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, CloseIcon, CopyIcon } from "../ui/icons";
+import { ChevronDown, CheckIcon, CloseIcon, CopyIcon } from "../ui/icons";
 
 export function NewProjectModal({
   onClose,
@@ -52,7 +52,7 @@ export function NewProjectModal({
           >
             NEW PROJECT
           </h2>
-          <button onClick={onClose} style={{ color: "#64748b" }}>
+          <button onClick={onClose} style={{ color: "#64748b", cursor: "pointer" }} aria-label="Close modal">
             <CloseIcon />
           </button>
         </div>
@@ -197,21 +197,12 @@ export function NewProjectModal({
             type="button"
             disabled={!canCopyCommand}
             onClick={handleCopyCommand}
-            className="transition-colors ml-3 shrink-0"
+            className={`transition-colors ml-3 shrink-0 ${canCopyCommand ? 'cursor-pointer' : ''}`}
             style={{ color: copied ? "#00E5FF" : canCopyCommand ? "#64748b" : "#334155" }}
             aria-label={copied ? "Copied" : "Copy command"}
           >
             {copied ? (
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M20 6 9 17l-5-5" />
-              </svg>
+              <CheckIcon />
             ) : (
               <CopyIcon />
             )}
@@ -222,7 +213,7 @@ export function NewProjectModal({
           type="button"
           onClick={() => onSaveProject(projectName, selectedProjectType)}
           disabled={!canSaveProject}
-          className="w-full py-2 font-mono font-bold tracking-widest transition-all"
+          className="w-full py-2 font-mono font-bold tracking-widest transition-all cursor-pointer"
           style={{
             fontSize: "10px",
             backgroundColor: canSaveProject ? "#00E5FF" : "rgba(255,255,255,0.04)",

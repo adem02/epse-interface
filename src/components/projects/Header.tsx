@@ -16,7 +16,7 @@ export function Header({
       <div className="flex gap-2">
         <button
           onClick={() => setShowNewProject(true)}
-          className="flex items-center gap-2 px-3 py-2 font-mono font-bold transition-all"
+          className="flex items-center gap-2 px-3 py-2 font-mono font-bold transition-all cursor-pointer"
           style={{
             backgroundColor: "#00E5FF",
             borderRadius: "4px",
