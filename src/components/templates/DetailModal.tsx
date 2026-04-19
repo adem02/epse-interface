@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CloseIcon, CopyIcon } from "../ui/icons";
+import { CheckIcon, CloseIcon, CopyIcon } from "../ui/icons";
 import type { Blueprint } from "../../types/templates.types";
 
 export function DetailModal({
@@ -14,12 +14,6 @@ export function DetailModal({
   const handleCopy = (cmd: string, index: number) => {
     navigator.clipboard.writeText(cmd);
     setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
-  };
-
-  const handleCopyAll = () => {
-    navigator.clipboard.writeText(blueprint.commands.join("\n"));
-    setCopiedIndex(-1);
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
@@ -61,32 +55,18 @@ export function DetailModal({
               {blueprint.title}
             </h2>
           </div>
-          <button onClick={onClose} style={{ color: "#64748b" }}>
+          <button onClick={onClose} style={{ color: "#64748b", cursor: "pointer" }}>
             <CloseIcon />
           </button>
         </div>
 
         <div className="p-6 space-y-2">
-          <div className="flex items-center justify-between mb-3">
-            <p
-              className="font-mono"
-              style={{ fontSize: "9px", color: "#64748b", letterSpacing: "2px" }}
-            >
-              COMMANDS - EXECUTE IN ORDER
-            </p>
-            <button
-              onClick={handleCopyAll}
-              className="flex items-center gap-1.5 font-mono transition-colors"
-              style={{
-                fontSize: "9px",
-                color: copiedIndex === -1 ? "#00E5FF" : "#64748b",
-                letterSpacing: "1px",
-              }}
-            >
-              <CopyIcon />
-              {copiedIndex === -1 ? "COPIED ALL" : "COPY ALL"}
-            </button>
-          </div>
+          <p
+            className="font-mono mb-3"
+            style={{ fontSize: "9px", color: "#64748b", letterSpacing: "2px" }}
+          >
+            COMMANDS - EXECUTE IN ORDER
+          </p>
 
           {blueprint.commands.map((cmd, index) => (
             <div
@@ -119,9 +99,9 @@ export function DetailModal({
               <button
                 onClick={() => handleCopy(cmd, index)}
                 className="opacity-0 group-hover:opacity-100 transition-opacity ml-3 shrink-0"
-                style={{ color: copiedIndex === index ? "#00E5FF" : "#64748b" }}
+                style={{ color: copiedIndex === index ? "#00E5FF" : "#64748b", cursor: "pointer" }}
               >
-                <CopyIcon />
+                {copiedIndex === index ? <CheckIcon /> : <CopyIcon />}
               </button>
             </div>
           ))}
