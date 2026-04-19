@@ -1,5 +1,6 @@
 export { ArrowRight } from "./ArrowRight";
 export { AtIcon } from "./AtIcon";
+export { CheckIcon } from "./CheckIcon";
 export { ChevronDown } from "./ChevronDown";
 export { ChevronRight } from "./ChevronRight";
 export { ClockIcon } from "./ClockIcon";
