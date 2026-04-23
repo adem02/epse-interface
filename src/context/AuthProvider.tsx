@@ -3,7 +3,7 @@ import { onAuthStateChanged, type User as FirebaseUser } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { authClient, firestoreClient } from "../lib/firebase/app";
 import { AuthContext } from "./auth-context";
-import type { UserSession } from "../types/user.types";
+import type { UserSession } from "../core/types";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<UserSession | null>(null);

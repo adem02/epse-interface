@@ -1,21 +1,17 @@
 import { useNavigate } from "react-router";
 import { TypeBadge } from "../TypeBadge";
 import { DotsIcon } from "../ui/icons";
+import type { Project } from "../../core/types";
 
 export function ProjectsTable({
   projects = [],
 }: {
-  projects: {
-    id: string;
-    name: string;
-    type: "CLEAN" | "LITE";
-    lastSync: string;
-  }[];
+  projects: Project[];
 }) {
   const navigate = useNavigate();
 
-  const formatDate = (iso: string) => {
-    return new Date(iso).toLocaleDateString("en-US", {
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
       hour: "2-digit",

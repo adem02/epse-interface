@@ -1,15 +1,21 @@
 import { FilterIcon, GridIcon, ListIcon } from "../ui/icons";
 
+type ProjectSortOption = "lastSync" | "name" | "type";
+
 export function ProjectsFilters({
   view,
   setView,
   search,
   setSearch,
+  sort,
+  setSort,
 }: {
   view: "grid" | "list";
   setView: (view: "grid" | "list") => void;
   search: string;
   setSearch: (search: string) => void;
+  sort: ProjectSortOption;
+  setSort: (sort: ProjectSortOption) => void;
 }) {
   return (
     <div className="flex items-center justify-between gap-3">
@@ -43,6 +49,8 @@ export function ProjectsFilters({
           SORT:
         </span>
         <select
+          value={sort}
+          onChange={(e) => setSort(e.target.value as ProjectSortOption)}
           className="font-mono outline-none px-2 py-1.5"
           style={{
             backgroundColor: "#0f141a",
@@ -52,9 +60,9 @@ export function ProjectsFilters({
             fontSize: "10px",
           }}
         >
-          <option>Last Synchronized</option>
-          <option>Name</option>
-          <option>Type</option>
+          <option value="lastSync">Last Synchronized</option>
+          <option value="name">Name</option>
+          <option value="type">Type</option>
         </select>
 
         {/* View toggle */}

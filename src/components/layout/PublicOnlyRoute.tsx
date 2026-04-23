@@ -9,7 +9,7 @@ export function PublicOnlyRoute() {
   }
 
   if (session) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/projects" replace />;
   }
 
   return <Outlet />;

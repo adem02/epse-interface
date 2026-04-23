@@ -1,5 +1,4 @@
-import type { CommandTypeLabel } from "../types/command-builder.types";
-import type { ProjectType } from "../types/project.types";
+import type { CommandTypeLabel, ProjectType } from "../core/types";
 
 type BadgeType = ProjectType | CommandTypeLabel;
 

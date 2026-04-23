@@ -4,15 +4,6 @@ import { useNavigate } from "react-router";
 import { AuthClient } from "../../lib/firebase/auth";
 import { useAuth } from "../../context/useAuth";
 
-const DashboardIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="3" y="3" width="7" height="7" />
-    <rect x="14" y="3" width="7" height="7" />
-    <rect x="3" y="14" width="7" height="7" />
-    <rect x="14" y="14" width="7" height="7" />
-  </svg>
-);
-
 const ProjectsIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
@@ -44,7 +35,6 @@ const UserIcon = () => (
 );
 
 const navItems = [
-  { to: "/dashboard", label: "DASHBOARD", icon: <DashboardIcon />, isPublic: false },
   { to: "/projects", label: "PROJECTS", icon: <ProjectsIcon />, isPublic: false },
   { to: "/builder", label: "COMMAND BUILDER", icon: <BuilderIcon />, isPublic: false },
   { to: "/templates", label: "TEMPLATES", icon: <TemplatesIcon />, isPublic: true },

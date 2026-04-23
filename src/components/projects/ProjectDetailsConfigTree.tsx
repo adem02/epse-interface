@@ -1,4 +1,4 @@
-import type { Project } from "../../types/project.types";
+import type { Project } from "../../core/types";
 import { TreeItem } from "../TreeItem";
 import { ChevronDown, ChevronRight, ConfigIcon, RouteIcon, ShieldIcon } from "../ui/icons";
 

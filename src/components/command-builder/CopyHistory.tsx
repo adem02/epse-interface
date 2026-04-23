@@ -1,5 +1,5 @@
 import { TypeBadge } from "../TypeBadge";
-import type { CopyHistoryInterface } from "../../types/command-builder.types";
+import type { CopyHistoryInterface } from "../../core/types";
 import { ClockIcon, CopyIcon } from "../ui/icons";
 
 export function CopyHistory({

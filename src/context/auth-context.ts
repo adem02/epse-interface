@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { AuthState } from "../types/user.types";
+import type { AuthState } from "../core/types";
 
 export type AuthContextValue = AuthState;
 

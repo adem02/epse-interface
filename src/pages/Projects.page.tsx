@@ -3,14 +3,17 @@ import { NewProjectModal } from "../components/projects/NewProjectModal";
 import { Header } from "../components/projects/Header";
 import { ProjectsFilters } from "../components/projects/ProjectsFilters";
 import { ProjectsList } from "../components/projects/ProjectsList";
-import type { CreateProjectData } from "../models/project.models";
-import type { Project, ProjectType } from "../types/project.types";
+import type { CreateProjectData } from "../core/models";
+import type { Project, ProjectType } from "../core/types";
 import { FirestoreClient } from "../lib/firebase/firestore";
 import { useProjectActions, useProjects } from "../store";
+
+type ProjectSortOption = "lastSync" | "name" | "type";
 
 export default function ProjectsPage() {
   const [view, setView] = useState<"grid" | "list">("grid");
   const [search, setSearch] = useState("");
+  const [sort, setSort] = useState<ProjectSortOption>("lastSync");
   const [showNewProject, setShowNewProject] = useState(false);
   const projects = useProjects();
   const {setProjects, addProject} = useProjectActions();
@@ -27,19 +30,25 @@ export default function ProjectsPage() {
           routes: d.routes,
           customMiddlewares: d.customMiddlewares,
           lastSync: d.lastSync.toDate()
-        }))
-        
-        console.log(data);
-        console.log('date type: ', typeof data[0].lastSync);
-        
+        }));
         
         setProjects(data);
       })
   }, [setProjects]);  
 
-  const filtered =  projects.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = projects
+    .filter((p) => p.name.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => {
+      switch (sort) {
+        case "name":
+          return a.name.localeCompare(b.name);
+        case "type":
+          return a.type.localeCompare(b.type);
+        case "lastSync":
+        default:
+          return b.lastSync.getTime() - a.lastSync.getTime();
+      }
+    });
 
   const handleSaveProject = async (projectName: string, projectType: string) => {
     const newProjectData: CreateProjectData = {
@@ -78,7 +87,14 @@ export default function ProjectsPage() {
       <Header setShowNewProject={setShowNewProject} />
 
       {/* Filters */}
-      <ProjectsFilters view={view} setView={setView} search={search} setSearch={setSearch} />
+      <ProjectsFilters
+        view={view}
+        setView={setView}
+        search={search}
+        setSearch={setSearch}
+        sort={sort}
+        setSort={setSort}
+      />
 
       {/* Grid / List */}
       <ProjectsList view={view} filtered={filtered} />

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { CommandBuildMode, CommandType } from "../../types/command-builder.types";
+import type { CommandBuildMode, CommandType } from "../../core/types";
 import { ChevronDown, TerminalIcon } from "../ui/icons";
 import { GenerateGuidance } from "./GenerateGuidance";
 import { Field } from "./Field";
-import { commandConfigs } from "../../utils/command-builder.utils";
-import { CommandBuilderService } from "../../services/CommandBuilder.service";
+import { commandConfigs } from "../../core/utils";
+import { CommandBuilderService } from "../../core/services/command-builder.service";
 import { ExecutionMode } from "./ExecutionMode";
 import { DisplayErrors } from "./DisplayErrors";
 

@@ -2,9 +2,8 @@ import { useState } from "react";
 import { BlueprintCard } from "../components/templates/BlueprintCard";
 import { DetailModal } from "../components/templates/DetailModal";
 import { templatesBlueprints } from "../data/templates.data";
-import type { Blueprint } from "../types/templates.types";
+import type { Blueprint } from "../core/types";
 
-// --- Main ---
 export default function TemplatesPage() {
   const blueprints: Blueprint[] = templatesBlueprints;
   const [copiedId, setCopiedId] = useState<string | null>(null);

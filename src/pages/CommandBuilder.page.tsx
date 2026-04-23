@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { CommandBuildMode, CommandType } from "../types/command-builder.types";
+import type { CommandBuildMode, CommandType } from "../core/types";
 import { CopyHistory } from "../components/command-builder/CopyHistory";
 import { LivePreviewer } from "../components/command-builder/LivePreviewer";
 import { BuilderForm } from "../components/command-builder/BuilderForm";

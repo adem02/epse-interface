@@ -1,4 +1,4 @@
-import type { Project } from "../../types/project.types";
+import type { Project } from "../../core/types";
 import { StatCard } from "../StatCard";
 
 export function ProjectDetailsStatCards({

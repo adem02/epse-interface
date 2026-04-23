@@ -1,5 +1,5 @@
-import type { EpseConfig, Project } from "../../types/project.types";
-import { mapProjectToEpseConfig } from "../../utils/project.utils";
+import type { EpseConfig, Project } from "../../core/types";
+import { mapProjectToEpseConfig } from "../../core/utils";
 import { JsonViewer } from "../JsonViewer";
 
 export function ProjectDetailsJsonViewer({
@@ -9,7 +9,6 @@ export function ProjectDetailsJsonViewer({
   handleSyncFile,
   handleCancelImport,
   project,
-  config,
   isSyncing,
   fileInputRef
 }: {
@@ -19,7 +18,6 @@ export function ProjectDetailsJsonViewer({
   handleSyncFile: () => void;
   handleCancelImport: () => void;
   project: Project;
-  config: EpseConfig;
   isSyncing: boolean;
   fileInputRef: React.RefObject<HTMLInputElement | null>;
 }) {
@@ -131,7 +129,7 @@ export function ProjectDetailsJsonViewer({
         style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
       >
         <span className="font-mono" style={{ fontSize: "9px", color: "#64748b", letterSpacing: "1px" }}>
-          LN {JSON.stringify(config, null, 2).split('\n').length} · SPACES: 2 · UTF-8
+          LN {JSON.stringify(mapProjectToEpseConfig(project), null, 2).split('\n').length} · SPACES: 2 · UTF-8
         </span>
         <span
           className="font-mono"
