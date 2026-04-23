@@ -1,26 +1,29 @@
-import {useActionState, useState} from "react";
+import {useActionState, useEffect, useState} from "react";
 import { useFormStatus } from "react-dom";
 import { authenticateUser } from "../../actions/auth.action";
 import { ArrowRight, AtIcon, LockIcon } from "../ui/icons";
 import { RegisterLink } from "./RegisterLink";
+import { useToastActions } from "../../store";
 
-function Submit({ isRegisterMode }: { isRegisterMode: boolean }) {
+function Submit({ isRegisterMode, disabled }: { isRegisterMode: boolean; disabled: boolean }) {
   const { pending } = useFormStatus();
   const label = isRegisterMode ? "Register" : "Log In";
   const pendingLabel = isRegisterMode ? "REGISTERING..." : "AUTHENTICATING...";
+  const isDisabled = pending || disabled;
 
   return (
     <button
         type="submit"
-        disabled={pending}
-        className="w-full flex items-center justify-center gap-2 py-3 font-mono font-bold tracking-widest transition-all active:scale-[0.98] cursor-pointer"
+        disabled={isDisabled}
+        className="w-full flex items-center justify-center gap-2 py-3 font-mono font-bold tracking-widest transition-all active:scale-[0.98]"
         style={{
-          backgroundColor: pending ? "#00B8CC" : "#00E5FF",
-          color: "#0a0e14",
+          backgroundColor: isDisabled ? "#1e2a35" : "#00E5FF",
+          color: isDisabled ? "#64748b" : "#0a0e14",
           borderRadius: "4px",
           fontSize: "12px",
           letterSpacing: "3px",
-          opacity: pending ? 0.8 : 1,
+          cursor: isDisabled ? "not-allowed" : "pointer",
+          border: isDisabled ? "1px solid rgba(255,255,255,0.06)" : "none",
         }}
       >
         {pending ? pendingLabel : (
@@ -36,8 +39,17 @@ function Submit({ isRegisterMode }: { isRegisterMode: boolean }) {
 export function AuthForm() {
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [message, authenticateUserAction] = useActionState(authenticateUser, '');
+  const { error } = useToastActions();
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const isRegisterFieldsMissing = !firstname.trim() || !lastname.trim();
+  const isSubmitDisabled = !email.trim() || !password.trim() || (isRegisterMode && isRegisterFieldsMissing);
 
-  console.log(message);
+  useEffect(() => {
+    if (message) error(message);
+  }, [message, error]);
 
   return (
     <>
@@ -60,6 +72,8 @@ export function AuthForm() {
                 name="firstname"
                 autoComplete="given-name"
                 placeholder="John"
+                value={firstname}
+                onChange={(e) => setFirstname(e.target.value)}
                 className="auth-input w-full px-3 py-2.5 font-mono outline-none transition-all"
                 style={{
                   backgroundColor: "#151a21",
@@ -94,6 +108,8 @@ export function AuthForm() {
                 name="lastname"
                 autoComplete="family-name"
                 placeholder="Doe"
+                value={lastname}
+                onChange={(e) => setLastname(e.target.value)}
                 className="auth-input w-full px-3 py-2.5 font-mono outline-none transition-all"
                 style={{
                   backgroundColor: "#151a21",
@@ -138,6 +154,8 @@ export function AuthForm() {
               name={"email"}
               autoComplete="email"
               placeholder="user@epse.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="auth-input w-full pl-9 pr-3 py-2.5 font-mono outline-none transition-all"
               style={{
                 backgroundColor: "#151a21",
@@ -191,6 +209,8 @@ export function AuthForm() {
               name={"password"}
               autoComplete={isRegisterMode ? "new-password" : "current-password"}
               placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="auth-input w-full pl-9 pr-3 py-2.5 font-mono outline-none transition-all"
               style={{
                 backgroundColor: "#151a21",
@@ -211,7 +231,7 @@ export function AuthForm() {
 
         {/* Submit */}
         <input type="hidden" name="mode" value={isRegisterMode ? "register" : "login"} />
-        <Submit isRegisterMode={isRegisterMode} />
+        <Submit isRegisterMode={isRegisterMode} disabled={isSubmitDisabled} />
       </form>
       <RegisterLink
         isRegisterMode={isRegisterMode}

@@ -51,7 +51,7 @@ export function ProjectsFilters({
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value as ProjectSortOption)}
-          className="font-mono outline-none px-2 py-1.5"
+          className="font-mono outline-none px-2 py-1.5 cursor-pointer"
           style={{
             backgroundColor: "#0f141a",
             border: "1px solid rgba(255,255,255,0.06)",
@@ -78,7 +78,7 @@ export function ProjectsFilters({
             <button
               key={v}
               onClick={() => setView(v)}
-              className="p-2 transition-all"
+              className="p-2 transition-all cursor-pointer"
               style={{
                 color: view === v ? "#00E5FF" : "#64748b",
                 backgroundColor: view === v ? "rgba(0,229,255,0.08)" : "transparent",

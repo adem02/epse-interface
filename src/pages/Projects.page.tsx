@@ -6,7 +6,8 @@ import { ProjectsList } from "../components/projects/ProjectsList";
 import type { CreateProjectData } from "../core/models";
 import type { Project, ProjectType } from "../core/types";
 import { FirestoreClient } from "../lib/firebase/firestore";
-import { useProjectActions, useProjects } from "../store";
+import { useProjectActions, useProjects, useToastActions } from "../store";
+import { useAuth } from "../context/useAuth";
 
 type ProjectSortOption = "lastSync" | "name" | "type";
 
@@ -17,12 +18,20 @@ export default function ProjectsPage() {
   const [showNewProject, setShowNewProject] = useState(false);
   const projects = useProjects();
   const {setProjects, addProject} = useProjectActions();
+  const { error, success } = useToastActions();
+  const { session } = useAuth();
 
   useEffect(() => {
-    FirestoreClient.getDocuments('project')
+    if (!session?.user.id) {
+      setProjects([]);
+      return;
+    }
+
+    FirestoreClient.getDocumentsByField('project', 'ownerId', session.user.id)
       .then(res => {
         const data = res.map<Project>(d => ({
           id: d.id,
+          ownerId: d.ownerId,
           name: d.name,
           type: d.type as ProjectType,
           auth: d.auth,
@@ -33,8 +42,14 @@ export default function ProjectsPage() {
         }));
         
         setProjects(data);
+        })
+        .catch(() => {
+          if (import.meta.env.DEV) {
+            console.error("Error loading projects from Firestore");
+          }
+          error("Unable to load projects. Please try again.");
       })
-  }, [setProjects]);  
+        }, [session?.user.id, setProjects, error]);  
 
   const filtered = projects
     .filter((p) => p.name.toLowerCase().includes(search.toLowerCase()))
@@ -51,7 +66,13 @@ export default function ProjectsPage() {
     });
 
   const handleSaveProject = async (projectName: string, projectType: string) => {
+    if (!session?.user.id) {
+      error("You must be signed in to create a project.");
+      return;
+    }
+
     const newProjectData: CreateProjectData = {
+      ownerId: session.user.id,
       name: projectName,
       type: projectType as ProjectType,
       database: false,
@@ -61,22 +82,31 @@ export default function ProjectsPage() {
       lastSync: new Date()
     }
 
-    const id = await FirestoreClient.createDocument<CreateProjectData>('project', newProjectData);
-    if (id) {
-      const newProject: Project = {
-        id,
-        name: projectName,
-        type: projectType as ProjectType,
-        database: false,
-        auth: false,
-        routes: [],
-        customMiddlewares: [],
-        lastSync: newProjectData.lastSync
+    try {
+      const id = await FirestoreClient.createDocument<CreateProjectData>('project', newProjectData);
+      if (id) {
+        const newProject: Project = {
+          id,
+          ownerId: session.user.id,
+          name: projectName,
+          type: projectType as ProjectType,
+          database: false,
+          auth: false,
+          routes: [],
+          customMiddlewares: [],
+          lastSync: newProjectData.lastSync
+        }
+        addProject(newProject);
       }
-      addProject(newProject);
-    }
 
-    setShowNewProject(false);
+      setShowNewProject(false);
+      success(`Project "${projectName}" created successfully!`);
+    } catch (e) {
+      if (import.meta.env.DEV) {
+        console.error("Error creating project in Firestore:", e);
+      }
+      error("Unable to create project. Please try again.");
+    }
   }
 
   return (

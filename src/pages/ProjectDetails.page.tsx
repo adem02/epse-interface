@@ -87,6 +87,24 @@ export default function ProjectDetailsPage() {
 
   return (
     <div className="flex flex-col gap-4 h-full">
+      <div>
+        <Link
+          to="/projects"
+          className="inline-block font-mono px-3 py-1.5 cursor-pointer"
+          style={{
+            backgroundColor: "rgba(0,229,255,0.12)",
+            borderRadius: "4px",
+            border: "1px solid rgba(0,229,255,0.3)",
+            color: "#00E5FF",
+            fontSize: "10px",
+            letterSpacing: "1.2px",
+            fontWeight: 700,
+          }}
+        >
+          ← BACK TO PROJECTS
+        </Link>
+      </div>
+
       <div className="flex gap-4">
         <ProjectDetailsStatCards project={project} />
       </div>

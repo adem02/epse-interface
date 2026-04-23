@@ -130,7 +130,7 @@ export default function Sidebar({ user = { name: "Admin", role: "CLI Context" } 
             key={item.to}
             to={item.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-sm transition-all font-mono ${
+              `flex items-center gap-3 px-3 py-2.5 rounded-sm transition-all font-mono cursor-pointer ${
                 isActive ? "text-white" : "text-slate-500 hover:text-slate-300"
               }`
             }
@@ -175,7 +175,7 @@ export default function Sidebar({ user = { name: "Admin", role: "CLI Context" } 
             </p>
             <button
               type="button"
-              className="mt-2 w-full font-mono px-2 py-2 transition-colors"
+              className="mt-2 w-full font-mono px-2 py-2 transition-colors cursor-pointer"
               style={{
                 backgroundColor: "#00E5FF",
                 borderRadius: "4px",
@@ -215,6 +215,7 @@ export default function Sidebar({ user = { name: "Admin", role: "CLI Context" } 
                 border: "1px solid rgba(255,255,255,0.06)",
                 borderRadius: "4px",
                 backgroundColor: "rgba(255,255,255,0.02)",
+                cursor: isLoggingOut ? "not-allowed" : "pointer",
               }}
               disabled={isLoggingOut}
               onClick={handleLogout}
@@ -237,7 +238,7 @@ export default function Sidebar({ user = { name: "Admin", role: "CLI Context" } 
         {session ? (
           <button
             type="button"
-            className="w-full flex items-center gap-3 px-2 py-2 rounded-sm transition-all"
+            className="w-full flex items-center gap-3 px-2 py-2 rounded-sm transition-all cursor-pointer"
             style={{
               border: isProfileMenuOpen
                 ? "1px solid rgba(0,229,255,0.28)"

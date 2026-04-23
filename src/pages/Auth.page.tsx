@@ -29,8 +29,7 @@ export default function AuthPage() {
 
             <AuthForm />
           </div>
-
-          {/* <AuthFormFooter /> */}
+          
         </AuthFormCard>
 
         <Link

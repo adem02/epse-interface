@@ -61,7 +61,7 @@ export function LivePreviewer({
         <div className="p-4" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
           <button
             onClick={() => onCopy(commandToCopy)}
-            className="w-full flex items-center justify-center gap-2 py-2.5 font-mono font-bold transition-all active:scale-[0.98]"
+            className="w-full flex items-center justify-center gap-2 py-2.5 font-mono font-bold transition-all active:scale-[0.98] cursor-pointer"
             style={{
               backgroundColor: copied ? "rgba(0,229,255,0.1)" : "#00E5FF",
               color: copied ? "#00E5FF" : "#0a0e14",

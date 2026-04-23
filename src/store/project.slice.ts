@@ -7,6 +7,7 @@ export interface ProjectSlice {
     setProjects: (projects: Project[]) => void;
     addProject: (project: Project) => void;
     getProjectById: (id: string) => Project | null;
+    updateProject: (project: Project) => void;
   }
 }
 
@@ -32,6 +33,18 @@ export const createProjectSlice: StateCreator<
       const project = get().projects.find(project => project.id === id);
 
       return project ?? null;
+    },
+    updateProject: (updatedProject: Project) => {
+      set(state => {
+        const projects = state.projects.map(project => {
+          if (project.id === updatedProject.id) {
+            return updatedProject;
+          }
+          return project;
+        })
+
+        return { projects }
+      })
     }
   }
 });

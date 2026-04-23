@@ -36,7 +36,7 @@ export function ExecutionMode({
               setMode("interactive");
               setFormErrors([]);
             }}
-            className="py-2 px-2 font-mono font-semibold transition-all"
+            className="py-2 px-2 font-mono font-semibold transition-all cursor-pointer"
             style={{
               fontSize: "10px",
               letterSpacing: "1.2px",
@@ -55,7 +55,7 @@ export function ExecutionMode({
           {!isAuthCommandSelected(selectedCommand) && <button
             type="button"
             onClick={() => setMode("manual")}
-            className="py-2 px-2 font-mono font-semibold transition-all"
+            className="py-2 px-2 font-mono font-semibold transition-all cursor-pointer"
             style={{
               fontSize: "10px",
               letterSpacing: "1.2px",

@@ -3,10 +3,13 @@ import type { EpseConfig, Project } from "../core/types";
 import { parseJsonDataToEpseConfig } from "../core/utils";
 import { FirestoreClient } from "../lib/firebase/firestore";
 import type { UpdateProjectData } from "../core/models";
-import { useProjectActions } from "../store";
+import { useProjectActions, useToastActions } from "../store";
+import { useAuth } from "../context/useAuth";
 
 export const useProjectDetailsHook = (projectId?: string) => {
-  const {getProjectById} = useProjectActions();
+  const {getProjectById, updateProject} = useProjectActions();
+  const { error: showError, success } = useToastActions();
+  const { session } = useAuth();
   const [project, setProject] = useState<Project | null>(() => (projectId ? (getProjectById(projectId) ?? null) : null));
   const [activeSection, setActiveSection] = useState<"routes" | "middlewares" | "config">("config");
   const [isLoading, setIsLoading] = useState<boolean>(() => !project && !!projectId);
@@ -16,10 +19,13 @@ export const useProjectDetailsHook = (projectId?: string) => {
   const [routesOpen, setRoutesOpen] = useState(true);
   const [middlewaresOpen, setMiddlewaresOpen] = useState(true);
 
-  
-
   useEffect(() => {
     if (!projectId || project) {
+      return;
+    }
+
+    if (!session?.user.id) {
+      setIsLoading(false);
       return;
     }
 
@@ -38,6 +44,7 @@ export const useProjectDetailsHook = (projectId?: string) => {
 
       const project: Project = {
         id: doc.id,
+        ownerId: doc.ownerId,
         name: doc.name,
         type: doc.type,
         auth: doc.auth,
@@ -49,12 +56,15 @@ export const useProjectDetailsHook = (projectId?: string) => {
 
       setProject(project);
     })
-    .catch((error) => {
+    .catch((e) => {
       if (cancelled) {
         return;
       }
 
-      console.error("Error fetching project:", error);
+      if (import.meta.env.DEV) {
+        console.error("Error fetching project:", e);
+      }
+      showError("Unable to load this project. Please try again.");
     })
     .finally(() => {
       if (!cancelled) {
@@ -65,7 +75,7 @@ export const useProjectDetailsHook = (projectId?: string) => {
     return () => {
       cancelled = true;
     };
-  }, [projectId, project]);
+  }, [projectId, project, session?.user.id, showError]);
 
   const handleSync = () => {
     fileInputRef.current?.click();
@@ -82,11 +92,11 @@ export const useProjectDetailsHook = (projectId?: string) => {
         const jsonData = JSON.parse(content);
         const parsedConfig = parseJsonDataToEpseConfig(jsonData);
         setSelectedFile({ name: file.name, content: parsedConfig });        
-      } catch (error) {
+      } catch (e) {
         if (import.meta.env.DEV) {
-          console.error("Failed to parse JSON:", error);
+          console.error("Failed to parse JSON:", e);
         }
-        alert("Erreur: Le fichier JSON est invalide");
+        showError("Invalid JSON file. Please check the format and try again.");
       }
     };
     reader.readAsText(file);
@@ -97,7 +107,7 @@ export const useProjectDetailsHook = (projectId?: string) => {
   };
 
   const handleSyncFile = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile || !project) return;
 
     setIsSyncing(true);
     
@@ -112,12 +122,31 @@ export const useProjectDetailsHook = (projectId?: string) => {
       lastSync: new Date()
     }
 
-    await FirestoreClient.updateDocument("project", project!.id, updatedProjectData);
-    
-    setTimeout(() => {
+    try {
+      await FirestoreClient.updateDocument("project", project.id, updatedProjectData);
+
+      const updatedProject: Project = {
+        id: project.id,
+        ownerId: project.ownerId,
+        ...updatedProjectData,
+      };
+
+      setProject(updatedProject);
+      updateProject(updatedProject);
+
+      setTimeout(() => {
+        setIsSyncing(false);
+        setSelectedFile(null);
+      }, 500);
+
+      success("Project configuration synced successfully!");
+    } catch (e) {
+      if (import.meta.env.DEV) {
+        console.error("Error syncing project config to Firestore:", e);
+      }
       setIsSyncing(false);
-      setSelectedFile(null);
-    }, 1000);
+      showError("Unable to sync project configuration. Please try again.");
+    }
   };
 
   const handleCancelImport = () => {

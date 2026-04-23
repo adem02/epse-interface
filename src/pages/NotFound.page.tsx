@@ -3,7 +3,7 @@ import { useAuth } from "../context/useAuth";
 
 export default function NotFoundPage() {
   const { session } = useAuth();
-  const defaultPath = session ? "/dashboard" : "/documentation";
+  const defaultPath = session ? "/projects" : "/documentation";
 
   return (
     <div className="h-full flex items-center justify-center">
