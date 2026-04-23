@@ -18,9 +18,9 @@ export function Logo() {
       </div>
       <span
         className="font-mono font-bold tracking-widest"
-        style={{ color: "#FFFFFF", fontSize: "13px", letterSpacing: "4px" }}
+        style={{ color: "#00E5FF", fontSize: "12px", letterSpacing: "3px" }}
       >
-        EPSE
+        EPSE CLI
       </span>
     </>
   )
