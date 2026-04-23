@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } f
 import { authClient, firestoreClient } from "./app";
 import type { RegisterData } from "../../core/models";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { getFirebaseErrorMessage } from "../../core/utils";
 
 export class AuthClient {
   static async register(data: RegisterData): Promise<string | null> {
@@ -14,16 +15,15 @@ export class AuthClient {
           firstname: data.firstname,
           lastname: data.lastname,
         });
+
+        return null;
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-
         if (import.meta.env.DEV) {
-          console.log('Error registering user:', errorCode, errorMessage);
+          console.log('Error registering user:', error.code, error.message);
         }
-        
-        return errorMessage;
+
+        return getFirebaseErrorMessage(error.code);
       });
   }
 
@@ -36,16 +36,15 @@ export class AuthClient {
         if (!userDoc.exists()) {
           throw new Error('User data not found in Firestore');
         }
+
+        return null;
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-
         if (import.meta.env.DEV) {
-          console.error('Error logging in user:', errorCode, errorMessage);          
+          console.error('Error logging in user:', error.code, error.message);
         }
 
-        return errorMessage;
+        return getFirebaseErrorMessage(error.code);
       });
   }
 

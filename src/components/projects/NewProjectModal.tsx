@@ -102,7 +102,7 @@ export function NewProjectModal({
                 name="projectType"
                 value={selectedProjectType}
                 onChange={e => setSelectedProjectType(e.target.value)}
-                className="w-full px-4 py-3 font-mono outline-none appearance-none transition-all"
+                className="w-full px-4 py-3 font-mono outline-none appearance-none transition-all cursor-pointer"
                 style={{
                   backgroundColor: "#0f141a",
                   border: "1px solid rgba(255,255,255,0.08)",

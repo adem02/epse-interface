@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc, type DocumentData } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where, type DocumentData } from "firebase/firestore";
 import { firestoreClient } from "./app";
 
 export class FirestoreClient {
@@ -20,6 +20,18 @@ export class FirestoreClient {
 
   static async getDocuments<T extends DocumentData>(dbCollection: string): Promise<T[]> {
     const querySnapshot = await getDocs(collection(firestoreClient, dbCollection));
+
+    const documents: T[] = [];
+    querySnapshot.forEach((doc) => {
+      documents.push({ id: doc.id, ...doc.data() as T });
+    });
+
+    return documents;
+  }
+
+  static async getDocumentsByField<T extends DocumentData>(dbCollection: string, field: string, value: string): Promise<T[]> {
+    const documentsQuery = query(collection(firestoreClient, dbCollection), where(field, "==", value));
+    const querySnapshot = await getDocs(documentsQuery);
 
     const documents: T[] = [];
     querySnapshot.forEach((doc) => {

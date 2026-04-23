@@ -6,12 +6,13 @@ export interface ProjectPreview {
 }
 export interface Project {
   id: string;
+  ownerId: string;
   name: string;
   type: ProjectType;
   controllersPath?: string;
   database: boolean;
   auth: boolean;
-  routes: { domaine: string; routeBasePath: string; }[];
+  routes: { domain: string; routeBasePath: string; }[];
   customMiddlewares: { name: string; }[];
   lastSync: Date;
 }
@@ -22,12 +23,12 @@ export interface EpseConfig {
   controllersPath?: string;
   database: boolean;
   auth: boolean;
-  routes: { domaine: string; routeBasePath: string; }[];
+  routes: { domain: string; routeBasePath: string; }[];
   customMiddlewares: { name: string; }[];
 }
 
 export interface RouteInterface {
-  domaine: string;
+  domain: string;
   routeBasePath: string;
 }
 

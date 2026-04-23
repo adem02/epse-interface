@@ -17,17 +17,11 @@ export async function authenticateUser(_: string|void, fd: FormData): Promise<st
       password,
     }
 
-    try {
-      await AuthClient.register(data);
-    } catch (e) {
-      return e instanceof Error ? e.message : 'An unexpected error occurred. Please try again.';
-    }
+    const errorMessage = await AuthClient.register(data);
+    if (errorMessage) return errorMessage;
 
   } else {
-    try {
-      await AuthClient.login(email, password);
-    } catch (e) {
-      return e instanceof Error ? e.message : 'An unexpected error occurred. Please try again.';
-    }
+    const errorMessage = await AuthClient.login(email, password);
+    if (errorMessage) return errorMessage;
   }
 }

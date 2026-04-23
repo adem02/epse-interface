@@ -1,6 +1,7 @@
 import type { CustomMiddlewareInterface, ProjectType, RouteInterface } from "../types/project.types";
 
 export interface CreateProjectData {
+  ownerId: string;
   name: string;
   type: ProjectType;
   database: boolean;

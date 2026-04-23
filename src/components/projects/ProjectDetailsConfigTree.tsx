@@ -56,7 +56,7 @@ export function ProjectDetailsConfigTree({
         {routesOpen && project.routes.map((route, i) => (
           <TreeItem
             key={i}
-            label={route.domaine}
+            label={route.domain}
             sub={route.routeBasePath}
             icon={<RouteIcon width={12} height={12} strokeWidth={2} />}
             active={activeSection === "routes"}
