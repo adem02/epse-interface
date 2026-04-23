@@ -1,4 +1,4 @@
-import type { Blueprint } from "../types/templates.types";
+import type { Blueprint } from "../core/types";
 
 export const templatesBlueprints: Blueprint[] = [
   {

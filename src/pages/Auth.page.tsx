@@ -3,7 +3,6 @@ import { Link } from "react-router";
 import { AuthFormCard } from "../components/auth/AuthFormCard";
 import { AuthForm } from "../components/auth/AuthForm";
 import { Logo } from "../components/auth/Logo";
-// import { AuthFormFooter } from "../components/auth/AuthFormFooter";
 
 export default function AuthPage() {
   return (

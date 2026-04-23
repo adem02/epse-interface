@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { authClient, firestoreClient } from "./app";
-import type { RegisterData } from "../../models/user.models";
+import type { RegisterData } from "../../core/models";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export class AuthClient {

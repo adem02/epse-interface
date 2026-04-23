@@ -1,6 +1,6 @@
 import { AuthBadge } from "./AuthBadge";
 import { TypeBadge } from "../TypeBadge";
-import type { Project } from "../../types/project.types";
+import type { Project } from "../../core/types";
 import { useNavigate } from "react-router";
 
 export function ProjectCard({ project }: { project: Project }) {

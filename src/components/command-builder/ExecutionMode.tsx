@@ -1,4 +1,4 @@
-import type { CommandBuildMode, CommandType } from "../../types/command-builder.types";
+import type { CommandBuildMode, CommandType } from "../../core/types";
 
 export function ExecutionMode({
   mode,

@@ -1,4 +1,3 @@
-import { projectDetailMockConfig } from "../data/project-detail.data";
 import { ProjectDetailsStatCards } from "../components/project-details/ProjectDetailsStatCards";
 import { Link, useParams } from "react-router";
 import { useProjectDetailsHook } from "../hooks/useProjectDetails.hook";
@@ -8,7 +7,6 @@ import { ProjectDetailsJsonViewer } from "../components/projects/ProjectDetailsJ
 
 export default function ProjectDetailsPage() {
   const { id } = useParams();
-  const config = projectDetailMockConfig;
   const {
     activeSection,
     setActiveSection,
@@ -112,7 +110,6 @@ export default function ProjectDetailsPage() {
             handleSyncFile={handleSyncFile}
             handleCancelImport={handleCancelImport}
             project={project}
-            config={config}
             isSyncing={isSyncing}
             fileInputRef={fileInputRef}
             handleSync={handleSync}

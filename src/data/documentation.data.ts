@@ -1,4 +1,4 @@
-import type { Section } from "../types/documentation.types";
+import type { Section } from "../core/types";
 
 export const documentationSections: Section[] = [
   { id: "getting-started", label: "Getting Started" },

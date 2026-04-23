@@ -1,5 +1,5 @@
 import type { StateCreator } from "zustand";
-import type { Project } from "../types/project.types"
+import type { Project } from "../core/types";
 
 export interface ProjectSlice {
   projects: Project[],

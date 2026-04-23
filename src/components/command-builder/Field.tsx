@@ -1,4 +1,4 @@
-import type { CommandField } from "../../types/command-builder.types";
+import type { CommandField } from "../../core/types";
 
 export function Field ({
   label,

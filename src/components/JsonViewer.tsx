@@ -1,4 +1,4 @@
-import type { EpseConfig } from "../types/project.types";
+import type { EpseConfig } from "../core/types";
 import { JsonLine } from "./JsonLine";
 
 export function JsonViewer({ config }: { config: EpseConfig }) {

@@ -9,7 +9,6 @@ interface BreadcrumbItem {
 interface LayoutProps {
   children: React.ReactNode;
   breadcrumbs: BreadcrumbItem[];
-  searchPlaceholder?: string;
   user?: {
     name: string;
     role: string;
@@ -19,14 +18,13 @@ interface LayoutProps {
 export default function Layout({
   children,
   breadcrumbs,
-  searchPlaceholder,
   user,
 }: LayoutProps) {
   return (
     <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "#0a0e14" }}>
       <Sidebar user={user} />
       <div className="flex flex-col flex-1 min-h-0">
-        <TopBar breadcrumbs={breadcrumbs} searchPlaceholder={searchPlaceholder} />
+        <TopBar breadcrumbs={breadcrumbs} />
         <main className="flex-1 overflow-auto p-6 pb-12">
           {children}
         </main>

@@ -1,4 +1,4 @@
-import type {RegisterData} from "../models/user.models.ts";
+import type { RegisterData } from "../core/models";
 import {AuthClient} from "../lib/firebase/auth.ts";
 
 export async function authenticateUser(_: string|void, fd: FormData): Promise<string|void> {

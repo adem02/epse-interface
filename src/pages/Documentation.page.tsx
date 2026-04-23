@@ -4,7 +4,7 @@ import { CommandRow } from "../components/documentation/CommandRow";
 import { Note } from "../components/documentation/Note";
 import { SectionTitle } from "../components/documentation/SectionTitle";
 import { documentationSections } from "../data/documentation.data";
-import type { Section } from "../types/documentation.types";
+import type { Section } from "../core/types";
 
 export default function DocumentationPage() {
   const [activeSection, setActiveSection] = useState("getting-started");
@@ -82,8 +82,7 @@ export default function DocumentationPage() {
           <SectionTitle id="getting-started">Getting Started</SectionTitle>
           <p className="font-mono" style={{ fontSize: "12px", color: "#64748b", lineHeight: "1.8" }}>
             Start by generating a new project, then run the <code style={{ color: "#00E5FF" }}>add</code> commands inside that project root.
-            Routes, services, repositories and custom middlewares are appended incrementally, while <code style={{ color: "#00E5FF" }}>epse add auth</code>
-            scaffolds the full authentication system in one step.
+            Routes, services, repositories and custom middlewares are appended incrementally, while <code style={{ color: "#00E5FF" }}>epse add auth </code> scaffolds the full authentication system in one step.
           </p>
           <div className="grid gap-3" style={{ gridTemplateColumns: "1fr 1fr" }}>
             {[
@@ -196,6 +195,9 @@ export default function DocumentationPage() {
             Use the generated project root as your working directory for every <code style={{ color: "#00E5FF" }}>epse add ...</code> command.
             For routes, <code style={{ color: "#00E5FF" }}>GET</code> is the default method, so only specify <code style={{ color: "#00E5FF" }}>--method=...</code> for other verbs.
           </p>
+          <Note>
+            All commands also support interactive mode. Run <code style={{ color: "#00E5FF" }}>epse &lt;command&gt;</code> to launch the guided CLI flow.
+          </Note>
           <div className="space-y-3">
             <CommandRow cmd="epse generate <name> [destination] --lite|--clean" description="Creates a new EPSE project in the selected architecture. Use . as destination to generate in the current directory." tag="GENERATE" />
             <CommandRow cmd="epse add route <domain> <url> --controller=<name> [--method=POST]" description="Generates a controller and registers the route. Omit --method for GET routes." tag="ROUTE" />

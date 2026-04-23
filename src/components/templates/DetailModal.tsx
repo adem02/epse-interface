@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CheckIcon, CloseIcon, CopyIcon } from "../ui/icons";
-import type { Blueprint } from "../../types/templates.types";
+import type { Blueprint } from "../../core/types";
 
 export function DetailModal({
   blueprint,

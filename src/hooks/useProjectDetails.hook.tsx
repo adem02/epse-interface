@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import type { EpseConfig, Project } from "../types/project.types";
-import { parseJsonDataToEpseConfig } from "../utils/project.utils";
+import type { EpseConfig, Project } from "../core/types";
+import { parseJsonDataToEpseConfig } from "../core/utils";
 import { FirestoreClient } from "../lib/firebase/firestore";
-import type { UpdateProjectData } from "../models/project.models";
+import type { UpdateProjectData } from "../core/models";
 import { useProjectActions } from "../store";
 
 export const useProjectDetailsHook = (projectId?: string) => {
@@ -81,11 +81,11 @@ export const useProjectDetailsHook = (projectId?: string) => {
         const content = e.target?.result as string;
         const jsonData = JSON.parse(content);
         const parsedConfig = parseJsonDataToEpseConfig(jsonData);
-        setSelectedFile({ name: file.name, content: parsedConfig });
-        console.log("Selected file content:", parsedConfig);
-        
+        setSelectedFile({ name: file.name, content: parsedConfig });        
       } catch (error) {
-        console.error("Failed to parse JSON:", error);
+        if (import.meta.env.DEV) {
+          console.error("Failed to parse JSON:", error);
+        }
         alert("Erreur: Le fichier JSON est invalide");
       }
     };

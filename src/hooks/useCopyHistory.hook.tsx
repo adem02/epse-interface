@@ -1,6 +1,6 @@
 import { useState } from "react"
-import type { CommandType, CopyHistoryInterface } from "../types/command-builder.types";
-import { mapCommandTypeToLabel } from "../utils/command-builder.utils";
+import type { CommandType, CopyHistoryInterface } from "../core/types";
+import { mapCommandTypeToLabel } from "../core/utils";
 
 const copyHistoryKey = 'copyHistory';
 
