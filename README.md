@@ -1,73 +1,21 @@
-# React + TypeScript + Vite
+# Epse Interface
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Demo en ligne: https://epse-50c1c.web.app/
 
-Currently, two official plugins are available:
+Epse Interface est une interface web pensée pour faciliter l'utilisation de EPSE CLI.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Le but est simple: rendre le workflow plus fluide, plus clair et plus rapide au quotidien.
 
-## React Compiler
+## Ce que permet l'application
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- gérer ses projets EPSE plus facilement
+- préparer des commandes sans perdre de temps
+- synchroniser et consulter les configurations dans une interface claire
 
-## Expanding the ESLint configuration
+## Pourquoi ce projet
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+J’ai créé ce projet pour proposer une expérience plus accessible autour d’EPSE CLI, surtout pour les personnes qui préfèrent une interface visuelle au terminal.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## En bref
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Une interface simple pour faciliter EPSE CLI.
